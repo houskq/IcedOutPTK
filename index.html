@@ -4,152 +4,2016 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080808">
-<title>PTK ARCHIVE — Unofficial Artist Wiki</title>
+<meta name="description" content="PTK ARCHIVE — Neoficiální fanouškovský archiv českého rappera PTK. Hudba, alba, videoklipy, kariéra a spolupráce.">
+<title>PTK ARCHIVE — The Artist Archive</title>
+
 <style>
-:root{--bg:#080808;--panel:#111;--panel2:#171717;--line:rgba(255,255,255,.11);--muted:#929292;--white:#f5f5f5;--soft:#c8c8c8;--max:1180px}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,Arial,Helvetica,sans-serif;line-height:1.65;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% -20%,rgba(255,255,255,.11),transparent 55%),linear-gradient(120deg,transparent 30%,rgba(255,255,255,.018),transparent 70%);z-index:-1}
-a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 44px));margin:auto}.topbar{position:sticky;top:0;z-index:20;background:rgba(8,8,8,.76);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
-.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-weight:900;letter-spacing:.18em;font-size:14px}.brand span{color:#777}.navlinks{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.navlinks a,.glass{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#d6d6d6;padding:10px 15px;border:1px solid rgba(255,255,255,.13);border-radius:999px;background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.025));box-shadow:inset 0 1px rgba(255,255,255,.08),0 8px 30px rgba(0,0,0,.2);backdrop-filter:blur(14px);transition:.25s;cursor:pointer}.navlinks a:hover,.glass:hover{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.15);transform:translateY(-2px);color:#fff}
-.menuBtn{display:none;background:none;border:1px solid var(--line);color:#fff;border-radius:12px;padding:10px}
-.hero{min-height:650px;display:flex;align-items:center;position:relative;padding:100px 0 90px;overflow:hidden}.hero:after{content:"PTK";position:absolute;right:-5%;top:5%;font-size:clamp(240px,40vw,560px);font-weight:950;letter-spacing:-.1em;color:rgba(255,255,255,.025);line-height:1;pointer-events:none}
-.hero-inner{position:relative;z-index:1;max-width:780px}.eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#999}.hero h1{font-size:clamp(92px,19vw,220px);line-height:.82;letter-spacing:-.09em;margin:22px 0 28px;font-weight:950}.hero h1 a{transition:.25s}.hero h1 a:hover{color:#aaa}.hero p{color:#aaa;max-width:540px;font-size:16px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}.primary{background:#f2f2f2;color:#090909;border-color:#f2f2f2;font-weight:800}.primary:hover{background:#fff;color:#000}
-.section{padding:95px 0;border-top:1px solid var(--line)}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:35px}.kicker{font-size:10px;color:#888;letter-spacing:.28em;text-transform:uppercase}.section h2{font-size:clamp(36px,6vw,66px);line-height:1;margin:10px 0 0;letter-spacing:-.055em}.section-intro{color:var(--muted);max-width:600px;margin:18px 0 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.018));border-radius:20px;padding:24px;backdrop-filter:blur(15px);box-shadow:inset 0 1px rgba(255,255,255,.06);transition:.25s}.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.28)}.card h3{margin:0 0 8px;font-size:19px}.card p{margin:0;color:#aaa;font-size:14px}.tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#aaa;border:1px solid var(--line);padding:5px 9px;border-radius:99px;margin-bottom:15px}
-.factgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.fact{padding:22px;border:1px solid var(--line);border-radius:17px;background:#101010}.fact strong{display:block;font-size:23px;letter-spacing:-.04em}.fact span{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.13em}
-.timeline{border-left:1px solid #444;margin:25px 0 0 8px;padding-left:28px}.event{position:relative;padding:0 0 28px}.event:before{content:"";position:absolute;left:-34px;top:7px;width:10px;height:10px;border-radius:50%;background:#eee;box-shadow:0 0 0 5px #171717}.year{font-size:11px;letter-spacing:.18em;color:#888}.event h3{margin:3px 0;font-size:18px}.event p{margin:0;color:#999;font-size:14px}
-.album-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.album{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#111;transition:.25s}.album:hover{transform:translateY(-5px);border-color:#777}.cover{aspect-ratio:1/1;display:flex;align-items:end;padding:17px;background:linear-gradient(145deg,#555,#171717 58%,#050505);position:relative;overflow:hidden}.cover:before{content:"";position:absolute;width:180%;height:70%;left:-35%;top:5%;transform:rotate(-28deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent)}.cover b{font-size:clamp(18px,2.5vw,30px);line-height:.95;letter-spacing:-.06em;position:relative;text-transform:uppercase;text-shadow:0 3px 18px #000}.album-info{padding:15px}.album-info strong{display:block}.album-info span{font-size:12px;color:#888}
-.video-tools{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0}.search{background:#101010;color:#fff;border:1px solid var(--line);padding:12px 16px;border-radius:999px;min-width:230px;outline:none}.search:focus{border-color:#888}.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.video{border:1px solid var(--line);border-radius:17px;overflow:hidden;background:#111;transition:.25s}.video:hover{transform:translateY(-4px);border-color:#777}.thumb{aspect-ratio:16/9;position:relative;display:flex;align-items:end;padding:16px;background:radial-gradient(circle at 70% 25%,#777,transparent 35%),linear-gradient(135deg,#363636,#111 65%,#050505);overflow:hidden}.thumb:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 24px,rgba(255,255,255,.035) 25px 26px)}.thumb:after{content:"▶";position:absolute;right:15px;top:15px;width:37px;height:37px;display:grid;place-items:center;border:1px solid #aaa;border-radius:50%;background:rgba(0,0,0,.4);font-size:13px}.thumb b{position:relative;z-index:1;font-size:clamp(19px,3vw,31px);line-height:.95;letter-spacing:-.06em;text-transform:uppercase;max-width:80%;text-shadow:0 3px 16px #000}.video-info{padding:15px}.video-info strong{display:block}.video-info small{color:#888}.video-info p{color:#aaa;font-size:12px;margin:7px 0 0}
-.note{border:1px solid var(--line);border-radius:16px;padding:17px 20px;background:rgba(255,255,255,.035);color:#aaa;font-size:13px;margin-top:22px}.source-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.source-list a{padding:15px;border:1px solid var(--line);border-radius:13px;color:#bbb;font-size:13px;background:#101010}.source-list a:hover{color:#fff;border-color:#777}
-footer{padding:50px 0;color:#777;border-top:1px solid var(--line);font-size:12px}.footer-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.backtop{position:fixed;right:22px;bottom:22px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid var(--line);color:#fff;backdrop-filter:blur(15px);cursor:pointer}
-@media(max-width:850px){.navlinks{display:none;position:absolute;top:76px;left:0;right:0;padding:18px;background:rgba(8,8,8,.96);border-bottom:1px solid var(--line)}.navlinks.open{display:flex}.menuBtn{display:block}.grid{grid-template-columns:repeat(2,1fr)}.factgrid{grid-template-columns:repeat(2,1fr)}.album-grid{grid-template-columns:repeat(3,1fr)}.video-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.wrap{width:min(100% - 30px,var(--max))}.hero{min-height:570px;padding:75px 0}.section{padding:70px 0}.grid,.video-grid{grid-template-columns:1fr}.album-grid{grid-template-columns:repeat(2,1fr)}.section-head{display:block}.source-list{grid-template-columns:1fr}.hero p{font-size:14px}}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #070707;
+    --bg2: #0c0c0c;
+    --panel: rgba(255,255,255,.045);
+    --panel-hover: rgba(255,255,255,.085);
+    --line: rgba(255,255,255,.105);
+    --line2: rgba(255,255,255,.2);
+    --white: #f5f5f5;
+    --soft: #b5b5b5;
+    --muted: #777;
+    --max: 1240px;
+    --radius: 22px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 105px;
+}
+
+body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 50% -15%, rgba(255,255,255,.105), transparent 55%),
+        radial-gradient(ellipse at 0% 45%, rgba(255,255,255,.025), transparent 40%),
+        radial-gradient(ellipse at 100% 80%, rgba(255,255,255,.025), transparent 40%);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: .13;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+.wrap {
+    width: min(var(--max), calc(100% - 48px));
+    margin: auto;
+}
+
+/* SCROLL PROGRESS */
+
+.progress {
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(255,255,255,.7);
+}
+
+/* NAVIGATION */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(7,7,7,.78);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--line);
+}
+
+.nav {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: .17em;
+    white-space: nowrap;
+}
+
+.brand span {
+    color: #777;
+    font-weight: 400;
+}
+
+.navlinks {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.navlinks a {
+    color: #999;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    padding: 11px 13px;
+    border-radius: 30px;
+    transition: .25s;
+}
+
+.navlinks a:hover,
+.navlinks a.active {
+    color: #fff;
+    background: rgba(255,255,255,.09);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-youtube {
+    border: 1px solid var(--line2);
+    border-radius: 30px;
+    padding: 10px 16px;
+    font-size: 10px;
+    letter-spacing: .1em;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: .25s;
+}
+
+.nav-youtube:hover {
+    background: white;
+    color: black;
+}
+
+.menu-btn {
+    display: none;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 12px;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    font-size: 19px;
+}
+
+/* HERO */
+
+.hero {
+    min-height: 780px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.hero-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    right: -100px;
+    top: 0;
+    background: radial-gradient(circle, rgba(255,255,255,.105), transparent 68%);
+    filter: blur(25px);
+}
+
+.hero-watermark {
+    position: absolute;
+    right: -4%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(300px, 55vw, 760px);
+    font-weight: 900;
+    letter-spacing: -.12em;
+    line-height: .8;
+    color: rgba(255,255,255,.025);
+    user-select: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 110px 0;
+}
+
+.hero-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #999;
+    font-size: 10px;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.hero-label::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: #aaa;
+}
+
+.hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(115px, 23vw, 280px);
+    font-weight: 700;
+    line-height: .82;
+    letter-spacing: -.105em;
+    margin: 38px 0 32px;
+}
+
+.hero h1 a {
+    transition: .3s;
+}
+
+.hero h1 a:hover {
+    color: #999;
+}
+
+.hero-description {
+    color: #999;
+    max-width: 480px;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 35px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--line2);
+    border-radius: 50px;
+    padding: 14px 22px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.045);
+    backdrop-filter: blur(15px);
+    transition: .3s;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,.13);
+    border-color: white;
+}
+
+.btn-white {
+    background: white;
+    color: #080808;
+    border-color: white;
+}
+
+.btn-white:hover {
+    background: #ccc;
+    color: #000;
+}
+
+.hero-bottom {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-top: 80px;
+    color: #666;
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.hero-bottom span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.hero-bottom span::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #888;
+}
+
+/* GENERAL SECTIONS */
+
+.section {
+    padding: 115px 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+}
+
+.section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 45px;
+}
+
+.section-number {
+    color: #666;
+    font-size: 10px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(42px, 7vw, 78px);
+    line-height: .98;
+    letter-spacing: -.065em;
+    margin-top: 13px;
+}
+
+.section-description {
+    max-width: 520px;
+    color: #888;
+    font-size: 14px;
+    line-height: 1.9;
+    margin-top: 18px;
+}
+
+.section-side {
+    color: #666;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-bottom: 8px;
+}
+
+/* GLASS CARDS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.card {
+    position: relative;
+    padding: 27px;
+    min-height: 185px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.012));
+    box-shadow: inset 0 1px rgba(255,255,255,.055);
+    backdrop-filter: blur(18px);
+    transition: .35s;
+    overflow: hidden;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.035);
+    filter: blur(30px);
+    transition: .35s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,.3);
+    background: linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.025));
+}
+
+.card:hover::after {
+    background: rgba(255,255,255,.09);
+}
+
+.card-tag {
+    display: inline-block;
+    color: #888;
+    font-size: 9px;
+    letter-spacing: .19em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+}
+
+.card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 21px;
+    letter-spacing: -.04em;
+    margin-bottom: 9px;
+}
+
+.card p {
+    color: #929292;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* INFO */
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.fact {
+    padding: 25px;
+    min-height: 125px;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    background: var(--panel);
+    transition: .3s;
+}
+
+.fact:hover {
+    background: var(--panel-hover);
+    border-color: var(--line2);
+}
+
+.fact-label {
+    display: block;
+    color: #777;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    margin-bottom: 15px;
+}
+
+.fact strong {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    letter-spacing: -.04em;
+}
+
+.note {
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.025);
+    border-radius: 15px;
+    padding: 19px 22px;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 20px;
+}
+
+/* CAREER TIMELINE */
+
+.timeline {
+    position: relative;
+    max-width: 850px;
+    margin: 15px 0 0 10px;
+    padding-left: 38px;
+    border-left: 1px solid #333;
+}
+
+.event {
+    position: relative;
+    padding: 0 0 38px;
+}
+
+.event:last-child {
+    padding-bottom: 0;
+}
+
+.event::before {
+    content: "";
+    position: absolute;
+    left: -44px;
+    top: 5px;
+    width: 11px;
+    height: 11px;
+    background: #eee;
+    border-radius: 50%;
+    box-shadow: 0 0 0 6px #171717;
+}
+
+.event-year {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: .22em;
+    font-weight: 700;
+}
+
+.event h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    margin: 5px 0;
+    letter-spacing: -.035em;
+}
+
+.event p {
+    color: #888;
+    font-size: 13px;
+    max-width: 650px;
+    line-height: 1.8;
+}
+
+/* ALBUMS */
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.album {
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    overflow: hidden;
+    background: #101010;
+    transition: .35s;
+}
+
+.album:hover {
+    transform: translateY(-7px);
+    border-color: #777;
+}
+
+.album-cover {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    display: flex;
+    align-items: end;
+    padding: 20px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 70% 25%, rgba(255,255,255,.23), transparent 32%),
+        linear-gradient(145deg, #444, #151515 60%, #050505);
+}
+
+.album-cover::before {
+    content: "";
+    position: absolute;
+    width: 180%;
+    height: 60%;
+    top: 10%;
+    left: -40%;
+    transform: rotate(-35deg);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+}
+
+.album-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,.65), transparent 65%);
+}
+
+.album-cover span {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(20px, 3vw, 34px);
+    line-height: .9;
+    font-weight: 700;
+    letter-spacing: -.07em;
+    text-transform: uppercase;
+}
+
+.album-info {
+    padding: 16px;
+}
+
+.album-info strong {
+    display: block;
+    font-size: 13px;
+}
+
+.album-info small {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: .08em;
+}
+
+/* VIDEOS */
+
+.video-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.search-box {
+    width: min(100%, 360px);
+    padding: 14px 19px;
+    color: white;
+    background: rgba(255,255,255,.045);
+    border: 1px solid var(--line);
+    outline: none;
+    border-radius: 40px;
+    font-size: 12px;
+    transition: .25s;
+}
+
+.search-box:focus {
+    border-color: #aaa;
+    background: rgba(255,255,255,.075);
+}
+
+.video-count {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 17px;
+}
+
+.video {
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    overflow: hidden;
+    background: #101010;
+    transition: .35s;
+}
+
+.video:hover {
+    transform: translateY(-6px);
+    border-color: #888;
+}
+
+.video-thumb {
+    aspect-ratio: 16 / 9;
+    position: relative;
+    display: flex;
+    align-items: end;
+    padding: 20px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 70% 25%, rgba(255,255,255,.25), transparent 30%),
+        linear-gradient(140deg, #393939, #151515 60%, #050505);
+}
+
+.video-thumb::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(135deg, transparent 0 27px, rgba(255,255,255,.035) 28px 29px);
+}
+
+.video-thumb::after {
+    content: "▶";
+    position: absolute;
+    right: 17px;
+    top: 17px;
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    background: rgba(0,0,0,.35);
+    font-size: 12px;
+    transition: .3s;
+}
+
+.video:hover .video-thumb::after {
+    background: white;
+    color: black;
+    transform: scale(1.1);
+}
+
+.video-thumb span {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(21px, 3vw, 35px);
+    font-weight: 700;
+    line-height: .95;
+    letter-spacing: -.07em;
+    text-transform: uppercase;
+    text-shadow: 0 3px 20px #000;
+}
+
+.video-info {
+    padding: 16px;
+}
+
+.video-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.video-info small {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: .08em;
+}
+
+.video-info p {
+    color: #888;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+.no-results {
+    display: none;
+    padding: 35px;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    color: #888;
+    font-size: 13px;
+}
+
+/* COLLABORATIONS */
+
+.collab-card {
+    min-height: 150px;
+}
+
+.collab-card h3 {
+    font-size: 24px;
+}
+
+/* ICEDOUT */
+
+.brand-section {
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+.brand-box {
+    position: relative;
+    padding: 65px;
+    border: 1px solid var(--line2);
+    border-radius: 25px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 85% 10%, rgba(255,255,255,.12), transparent 45%),
+        linear-gradient(135deg, #171717, #090909);
+}
+
+.brand-box::after {
+    content: "ICEDOUT";
+    position: absolute;
+    right: -30px;
+    bottom: -70px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(90px, 17vw, 230px);
+    font-weight: 900;
+    letter-spacing: -.1em;
+    color: rgba(255,255,255,.035);
+    pointer-events: none;
+}
+
+.brand-box h2 {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(50px, 9vw, 100px);
+    letter-spacing: -.09em;
+    line-height: .9;
+}
+
+.brand-box p {
+    position: relative;
+    z-index: 1;
+    color: #999;
+    max-width: 520px;
+    font-size: 14px;
+    line-height: 1.9;
+    margin-top: 22px;
+}
+
+.brand-box .hero-actions {
+    position: relative;
+    z-index: 1;
+}
+
+/* SOURCES */
+
+.source-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.source-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    background: var(--panel);
+    color: #aaa;
+    font-size: 12px;
+    transition: .25s;
+}
+
+.source-list a span {
+    color: #666;
+}
+
+.source-list a:hover {
+    color: white;
+    border-color: #888;
+    background: var(--panel-hover);
+}
+
+/* FOOTER */
+
+footer {
+    padding: 55px 0;
+    color: #666;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+}
+
+.footer-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 27px;
+    font-weight: 700;
+    letter-spacing: -.06em;
+    color: #ddd;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    transition: .2s;
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-top: 22px;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+/* BACK TO TOP */
+
+.backtop {
+    position: fixed;
+    z-index: 40;
+    right: 25px;
+    bottom: 25px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--line2);
+    background: rgba(25,25,25,.8);
+    backdrop-filter: blur(15px);
+    color: white;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: .3s;
+}
+
+.backtop.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.backtop:hover {
+    background: white;
+    color: black;
+}
+
+/* ANIMATIONS */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s ease, transform .8s ease;
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+    .navlinks {
+        gap: 0;
+    }
+
+    .navlinks a {
+        padding: 10px 9px;
+        font-size: 9px;
+    }
+
+    .nav-youtube {
+        display: none;
+    }
+
+    .album-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .wrap {
+        width: min(100% - 32px, var(--max));
+    }
+
+    .nav {
+        height: 68px;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .navlinks {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        flex-direction: column;
+        align-items: stretch;
+        background: rgba(8,8,8,.97);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .navlinks.open {
+        display: flex;
+    }
+
+    .navlinks a {
+        padding: 14px;
+        font-size: 11px;
+    }
+
+    .hero {
+        min-height: 690px;
+    }
+
+    .hero-content {
+        padding: 90px 0;
+    }
+
+    .hero-bottom {
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 55px;
+    }
+
+    .section {
+        padding: 85px 0;
+    }
+
+    .section-head {
+        display: block;
+    }
+
+    .section-side {
+        display: none;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .facts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .brand-box {
+        padding: 40px 28px;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero {
+        min-height: 620px;
+    }
+
+    .hero h1 {
+        font-size: 34vw;
+    }
+
+    .hero-description {
+        font-size: 13px;
+    }
+
+    .hero-bottom {
+        font-size: 8px;
+    }
+
+    .grid,
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .album-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .album-info {
+        padding: 12px;
+    }
+
+    .album-info strong {
+        font-size: 11px;
+    }
+
+    .album-cover {
+        padding: 13px;
+    }
+
+    .album-cover span {
+        font-size: 23px;
+    }
+
+    .facts {
+        gap: 9px;
+    }
+
+    .fact {
+        padding: 17px;
+        min-height: 105px;
+    }
+
+    .fact strong {
+        font-size: 17px;
+    }
+
+    .source-list {
+        grid-template-columns: 1fr;
+    }
+
+    .section {
+        padding: 70px 0;
+    }
+
+    .section h2 {
+        font-size: 48px;
+    }
+
+    .brand-box {
+        padding: 35px 22px;
+    }
+
+    .footer-top,
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .backtop {
+        right: 15px;
+        bottom: 15px;
+    }
+}
 </style>
 </head>
+
 <body>
-<header class="topbar"><div class="wrap nav">
-<a class="brand" href="#top">PTK <span>ARCHIVE</span></a>
-<button class="menuBtn" id="menuBtn" aria-label="Otevřít menu">☰</button>
-<nav class="navlinks" id="navlinks">
-<a href="#wiki">Wiki</a><a href="#info">Info</a><a href="#career">Kariéra</a><a href="#music">Hudba</a><a href="#videos">Videa</a><a href="#collabs">Spolupráce</a><a href="#sources">Zdroje</a>
-</nav></div></header>
+
+<div class="progress" id="progress"></div>
+
+<!-- NAVIGATION -->
+
+<header class="topbar">
+    <div class="wrap nav">
+
+        <a class="brand" href="#top">PTK <span>ARCHIVE</span></a>
+
+        <nav class="navlinks" id="navlinks">
+            <a href="#wiki">Wiki</a>
+            <a href="#info">Profil</a>
+            <a href="#career">Kariéra</a>
+            <a href="#music">Hudba</a>
+            <a href="#videos">Videa</a>
+            <a href="#collabs">Spolupráce</a>
+            <a href="#icedout">ICEDOUT</a>
+        </nav>
+
+        <div class="nav-right">
+            <a class="nav-youtube" href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube ↗</a>
+            <button class="menu-btn" id="menuBtn" aria-label="Otevřít menu">☰</button>
+        </div>
+
+    </div>
+</header>
+
+
 <main id="top">
-<section class="hero"><div class="wrap hero-inner">
-<div class="eyebrow">Unofficial artist encyclopedia · Czech Republic</div>
-<h1><a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener" title="Otevřít YouTube kanál PTK">PTK</a></h1>
-<p>Digitální archiv českého rappera PTK. Životopis, hudební kariéra, alba, videoklipy a důležité momenty na jednom místě.</p>
-<div class="hero-actions"><a class="glass primary" href="#wiki">Prozkoumat wiki ↓</a><a class="glass" href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube kanál ↗</a></div>
-</div></section>
 
-<section class="section" id="wiki"><div class="wrap">
-<div class="section-head"><div><div class="kicker">01 / Encyclopedia</div><h2>Wiki</h2><p class="section-intro">PTK, vlastním jménem Patrik Aišman, je český rapper pocházející z Chebu. Ve své tvorbě vychází z osobních zkušeností a vlastního života. Postupně si vybudoval publikum prostřednictvím SoundCloudu, YouTube a streamovacích platforem.</p></div></div>
-<div class="grid">
-<article class="card"><span class="tag">Původ</span><h3>Chebské kořeny</h3><p>PTK pochází z Chebu. V rozhovoru pro Chebský deník popsal své rodné město jako místo, kde jeho příběh začal a ke kterému má osobní vztah.</p></article>
-<article class="card"><span class="tag">Tvorba</span><h3>„Píšu, co žiju“</h3><p>V rozhovoru uvedl, že jeho hudba úzce souvisí s osobním životem, prožitými etapami a zkušenostmi. Texty podle něj vycházejí z toho, co skutečně žije.</p></article>
-<article class="card"><span class="tag">Začátky</span><h3>Nezávislá cesta</h3><p>Mezi rané projekty patří mixtape YoungMotherFucker z roku 2013 a Do konce zásob z roku 2015. Na YouTube začal pravidelněji vydávat pod názvem iced out PTK.</p></article>
-<article class="card"><span class="tag">Průlom</span><h3>Nevezmu tě z klubu domů</h3><p>Videotrilogie z let 2017–2018 patří k zásadním momentům jeho kariéry a pomohla dostat PTK do širšího povědomí posluchačů.</p></article>
-<article class="card"><span class="tag">Image</span><h3>ICEDOUT</h3><p>Vedle hudby se věnuje také módě. Vlastní značku ICEDOUT začal budovat kolem roku 2017 a podílí se na návrhu oblečení.</p></article>
-<article class="card"><span class="tag">Vydávání</span><h3>Vlastní kanál</h3><p>Videoklipy publikuje na YouTube kanálu iced out PTK. Hudbu vydává také na Spotify a Apple Music pod jménem P T K.</p></article>
-</div>
-<div class="note">Poznámka k přesnosti: jde o neoficiální fanouškovský archiv. Informace jsou sestavené z veřejných zdrojů; u údajů, které se mezi databázemi rozcházejí, je rozpor výslovně označen.</div>
-</div></section>
+<!-- HERO -->
 
-<section class="section" id="info"><div class="wrap"><div class="kicker">02 / Artist profile</div><h2>Základní info</h2><p class="section-intro">Základní veřejně uváděné údaje o interpretovi.</p>
-<div class="factgrid" style="margin-top:30px">
-<div class="fact"><span>Umělecké jméno</span><strong>PTK / P T K</strong></div>
-<div class="fact"><span>Jméno</span><strong>Patrik Aišman</strong></div>
-<div class="fact"><span>Původ</span><strong>Cheb, Česko</strong></div>
-<div class="fact"><span>Hudební oblast</span><strong>Rap / trap</strong></div>
-</div>
-<div class="note">Datum narození: hudební databáze CS Music a Qobuz uvádějí 12. 1. 1994, zatímco eXtra.cz uvádí rok 1995. Proto zde datum není prezentováno jako definitivně ověřený údaj.</div>
-</div></section>
+<section class="hero">
+    <div class="hero-bg">
+        <div class="hero-glow"></div>
+        <div class="hero-watermark">PTK</div>
+    </div>
 
-<section class="section" id="career"><div class="wrap"><div class="kicker">03 / Timeline</div><h2>Kariéra</h2><p class="section-intro">Výběr důležitých veřejně doložených milníků. Nejde o úplný seznam všech vydání ani vystoupení.</p>
-<div class="timeline">
-<div class="event"><div class="year">2013</div><h3>YoungMotherFucker</h3><p>Rané mixtape vydané na SoundCloudu.</p></div>
-<div class="event"><div class="year">2015</div><h3>Do konce zásob</h3><p>Další raný projekt a začátek pravidelnějšího vydávání na kanálu iced out PTK.</p></div>
-<div class="event"><div class="year">2017–2018</div><h3>Nevezmu tě z klubu domů</h3><p>Videotrilogie, která výrazně rozšířila jeho dosah na YouTube. Skladby se staly jedněmi z nejznámějších v jeho rané tvorbě.</p></div>
-<div class="event"><div class="year">2018</div><h3>Od Chebu po Ostravu</h3><p>Období koncertování a stejnojmenné tour; PTK vystupoval také s dalšími interprety.</p></div>
-<div class="event"><div class="year">2021</div><h3>27, Utopený v čase, Bad Vibe</h3><p>Rok výrazných albových vydání, která rozšířila jeho diskografii.</p></div>
-<div class="event"><div class="year">2022</div><h3>Trappin Lonely</h3><p>Další studiový projekt a pokračování jeho samostatné tvorby.</p></div>
-<div class="event"><div class="year">2023</div><h3>Golden Hill, Trap Menu, Silent Kill</h3><p>Rok několika projektů včetně spolupráce se Slugerrem na Trap Menu.</p></div>
-<div class="event"><div class="year">2024</div><h3>Painkillers</h3><p>Společné album s Yzomandiasem, vydané v listopadu 2024.</p></div>
-<div class="event"><div class="year">2025</div><h3>Karakoram</h3><p>Vydání sólového alba Karakoram.</p></div>
-<div class="event"><div class="year">2026</div><h3>Karakoram DLC a další singly</h3><p>V roce 2026 následovala rozšířená verze Karakoram DLC a nové videoklipy, mimo jiné Rayman, Kenpachi&Yachiru a Gone.</p></div>
-</div></div></section>
+    <div class="wrap hero-content">
 
-<section class="section" id="music"><div class="wrap"><div class="kicker">04 / Discography</div><h2>Hudba & alba</h2><p class="section-intro">Výběr známých albových a společných projektů. Uvedené roky vycházejí z hudebních katalogů; úplný katalog singlů se průběžně mění.</p>
-<div class="album-grid" style="margin-top:30px">
-<div class="album"><div class="cover"><b>27</b></div><div class="album-info"><strong>27</strong><span>2021 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Utopený<br>v čase</b></div><div class="album-info"><strong>Utopený v čase</strong><span>2021 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Bad<br>Vibe</b></div><div class="album-info"><strong>Bad Vibe</strong><span>2021 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Trappin<br>Lonely</b></div><div class="album-info"><strong>Trappin Lonely</strong><span>2022 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Golden<br>Hill</b></div><div class="album-info"><strong>Golden Hill</strong><span>2023 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Trap<br>Menu</b></div><div class="album-info"><strong>Trap Menu · Slugerr</strong><span>2023 · Společný projekt</span></div></div>
-<div class="album"><div class="cover"><b>Silent<br>Kill</b></div><div class="album-info"><strong>Silent Kill</strong><span>2023 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Pain<br>killers</b></div><div class="album-info"><strong>Painkillers · Yzomandias</strong><span>2024 · Společné album</span></div></div>
-<div class="album"><div class="cover"><b>Kara<br>koram</b></div><div class="album-info"><strong>Karakoram</strong><span>2025 · Album</span></div></div>
-<div class="album"><div class="cover"><b>Karakoram<br>DLC</b></div><div class="album-info"><strong>Karakoram DLC</strong><span>2026 · Rozšířená edice</span></div></div>
-<div class="album"><div class="cover"><b>Kurvy v<br>pozoru</b></div><div class="album-info"><strong>Kurvy v pozoru</strong><span>2026 · Vydání uváděné v katalogu Qobuz</span></div></div>
-</div>
-<div class="note">Rané projekty: YoungMotherFucker (2013), Do konce zásob (2015), A Jedeš (2018), Období Proměnný (2019), Inferno (2019), Musim Zvládnout 3 (2019). Katalogy se mohou lišit v tom, zda projekt řadí mezi album, mixtape nebo EP.</div>
-</div></section>
+        <div class="hero-label">Unofficial artist archive · Czech Republic</div>
 
-<section class="section" id="videos"><div class="wrap"><div class="kicker">05 / Official videos</div><h2>Videa</h2><p class="section-intro">Výběr známých videoklipů a novějších vydání. Kliknutí otevře vyhledání konkrétního oficiálního videa na YouTube; automatické načítání náhledů vyžaduje YouTube API, proto jsou zde stylizované náhledové karty.</p>
-<div class="video-tools"><input class="search" id="videoSearch" type="search" placeholder="Hledat skladbu…"><span class="tag" id="videoCount">Výběr videoklipů</span></div>
-<div class="video-grid" id="videoGrid">
-<a class="video" data-title="Nevezmu tě z klubu domů 3" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+3+official" target="_blank" rel="noopener"><div class="thumb"><b>Nevezmu tě<br>z klubu domů 3</b></div><div class="video-info"><strong>Nevezmu tě z klubu domů 3</strong><small>2017–2018 · Official video</small></div></a>
-<a class="video" data-title="Nevezmu tě z klubu domů 2" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+2+official" target="_blank" rel="noopener"><div class="thumb"><b>Nevezmu tě<br>z klubu domů 2</b></div><div class="video-info"><strong>Nevezmu tě z klubu domů 2</strong><small>2017 · Official video</small></div></a>
-<a class="video" data-title="Nevezmu tě z klubu domů" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+official" target="_blank" rel="noopener"><div class="thumb"><b>Nevezmu tě<br>z klubu domů</b></div><div class="video-info"><strong>Nevezmu tě z klubu domů</strong><small>2017 · Official video</small></div></a>
-<a class="video" data-title="Krvácej na zemi" href="https://www.youtube.com/results?search_query=PTK+Krva+cej+na+zemi+official" target="_blank" rel="noopener"><div class="thumb"><b>Krvácej<br>na zemi</b></div><div class="video-info"><strong>Krvácej na zemi</strong><small>2018 · Official video</small></div></a>
-<a class="video" data-title="Baby a Benzo" href="https://www.youtube.com/results?search_query=PTK+Baby+Benzo+Yzomandias+official" target="_blank" rel="noopener"><div class="thumb"><b>Baby &<br>Benzo</b></div><div class="video-info"><strong>Baby&Benzo feat. Yzomandias</strong><small>2022 · Official video</small></div></a>
-<a class="video" data-title="Střízlivý" href="https://www.youtube.com/results?search_query=PTK+Strizlivy+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Střízlivý</b></div><div class="video-info"><strong>Střízlivý</strong><small>2021 · Official video</small></div></a>
-<a class="video" data-title="Sunset" href="https://www.youtube.com/results?search_query=Separ+PTK+Sunset+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Sunset</b></div><div class="video-info"><strong>Sunset · Separ feat. PTK</strong><small>2023 · Official video</small></div></a>
-<a class="video" data-title="Nikdy Broke" href="https://www.youtube.com/results?search_query=PTK+Slugerr+Nikdy+Broke+official" target="_blank" rel="noopener"><div class="thumb"><b>Nikdy<br>Broke</b></div><div class="video-info"><strong>Nikdy Broke</strong><small>2023 · Official video</small></div></a>
-<a class="video" data-title="Silent Kill" href="https://www.youtube.com/results?search_query=PTK+Silent+Kill+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Silent<br>Kill</b></div><div class="video-info"><strong>Silent Kill</strong><small>2023 · Official video</small></div></a>
-<a class="video" data-title="Painkillers" href="https://www.youtube.com/results?search_query=PTK+Yzomandias+Painkillers+official+music+video" target="_blank" rel="noopener"><div class="thumb"><b>Painkillers</b></div><div class="video-info"><strong>Painkillers feat. Luca Brassi10x</strong><small>2024 · Official video</small></div></a>
-<a class="video" data-title="Ksn" href="https://www.youtube.com/results?search_query=PTK+KSN+official+video" target="_blank" rel="noopener"><div class="thumb"><b>KSN</b></div><div class="video-info"><strong>KSN</strong><small>2025 · Official video</small></div></a>
-<a class="video" data-title="Kenpachi Yachiru" href="https://www.youtube.com/results?search_query=PTK+Kenpachi+Yachiru+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Kenpachi<br>& Yachiru</b></div><div class="video-info"><strong>Kenpachi&Yachiru</strong><small>2026 · Official video</small></div></a>
-<a class="video" data-title="Rayman" href="https://www.youtube.com/results?search_query=PTK+Rayman+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Rayman</b></div><div class="video-info"><strong>Rayman</strong><small>2026 · Official video</small></div></a>
-<a class="video" data-title="Gone" href="https://www.youtube.com/results?search_query=PTK+Kairo+Keyz+Gone+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Gone</b></div><div class="video-info"><strong>Gone · Kairo Keyz</strong><small>2026 · Official video</small></div></a>
-<a class="video" data-title="Nádech" href="https://www.youtube.com/results?search_query=PTK+nadech+official+video" target="_blank" rel="noopener"><div class="thumb"><b>Nádech</b></div><div class="video-info"><strong>Nádech</strong><small>2026 · Official video</small></div></a>
-</div>
-<div class="note">Náhledy jsou grafické placeholdery, nikoli stažené oficiální YouTube thumbnaily. Názvy a odkazy jsou připravené pro doplnění přesných ID videí; počty zhlédnutí se bez živého zdroje nezobrazují, aby nebyly zastaralé nebo vymyšlené.</div>
-</div></section>
+        <h1>
+            <a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">PTK</a>
+        </h1>
 
-<section class="section" id="collabs"><div class="wrap"><div class="kicker">06 / People & projects</div><h2>Spolupráce</h2><p class="section-intro">Výběr jmen a společných projektů, které se objevují ve veřejných zdrojích a diskografii.</p>
-<div class="grid">
-<div class="card"><span class="tag">Dlouhodobá spolupráce</span><h3>Slugerr</h3><p>PTK v rozhovoru popsal Slugerra jako blízkého člověka, se kterým spolupracuje od začátků. Společně vydali projekt Trap Menu.</p></div>
-<div class="card"><span class="tag">Společné album</span><h3>Yzomandias</h3><p>Společné album Painkillers vyšlo v listopadu 2024. Spolupráce navázala také na dřívější track Baby&Benzo.</p></div>
-<div class="card"><span class="tag">Hostování</span><h3>Separ</h3><p>PTK se objevil na skladbě Sunset, která patří mezi výrazné streamované spolupráce.</p></div>
-<div class="card"><span class="tag">Další jména</span><h3>Viktor Sheen, Calin, Nik Tendo</h3><p>Jména uváděná mezi hosty a spolupracovníky v souvislosti s projektem Silent Kill a jeho tracklistem.</p></div>
-<div class="card"><span class="tag">Tým</span><h3>Capitan Elda</h3><p>Manažer a dlouholetý spolupracovník. V rozhovoru popsal jejich přátelství a společnou práci na koncertech, videoklipech, distribuci a PR.</p></div>
-<div class="card"><span class="tag">Vizuál</span><h3>Filip Nguyen</h3><p>Blízký kamarád a kameraman. V rozhovoru uvedl, že se s PTK znají od dětství.</p></div>
-</div></div></section>
+        <p class="hero-description">
+            Digitální archiv českého rappera PTK.
+            Hudební kariéra, alba, videoklipy, spolupráce
+            a důležité momenty na jednom místě.
+        </p>
 
-<section class="section" id="brand"><div class="wrap"><div class="kicker">07 / Fashion</div><h2>ICEDOUT</h2><p class="section-intro">PTK se vedle hudby věnuje také módě. V rozhovoru pro Chebský deník uvedl, že první kusy oblečení začal dělat kolem roku 2017. Značka měla nabídnout odlišný styl a osobní pohled na módu.</p><div class="hero-actions"><a class="glass" href="https://www.icedout.cz/" target="_blank" rel="noopener">ICEDOUT web ↗</a><a class="glass" href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube iced out PTK ↗</a></div></div></section>
+        <div class="hero-actions">
+            <a class="btn btn-white" href="#wiki">Prozkoumat archiv ↓</a>
+            <a class="btn" href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube kanál ↗</a>
+        </div>
 
-<section class="section" id="sources"><div class="wrap"><div class="kicker">08 / References</div><h2>Zdroje</h2><p class="section-intro">Odkazy pro ověření a další rozšiřování archivu. Údaje se mohou měnit a některé katalogy mohou mít odlišné zařazení vydání.</p>
-<div class="source-list" style="margin-top:28px">
-<a href="https://chebsky.denik.cz/zpravy_region/chebsky-rodak-raper-ptk-je-na-hudebnim-vzestupu-pysni-se-i-svou-modni-znackou-20.html" target="_blank" rel="noopener">Chebský deník — rozhovor s PTK (2022) ↗</a>
-<a href="https://www.csmusic.cz/int-5686-ptk" target="_blank" rel="noopener">CS Music — profil a diskografie ↗</a>
-<a href="https://www.qobuz.com/us-en/interpreter/p-t-k/9222508" target="_blank" rel="noopener">Qobuz — profil a katalog vydání ↗</a>
-<a href="https://www.kworb.net/spotify/artist/5iYtjtFv6SvHX95ny4fVEz_songs.html" target="_blank" rel="noopener">Kworb — statistiky Spotify ↗</a>
-<a href="https://asknaveen.com/channel/%40icedoutptk" target="_blank" rel="noopener">iced out PTK — přehled videí kanálu ↗</a>
-<a href="https://www.theculture.cz/interpreti/ptk" target="_blank" rel="noopener">The Culture — profil interpreta ↗</a>
-<a href="https://popnable.com/czech-republic/artists/35053-ptk/songs" target="_blank" rel="noopener">Popnable — seznam skladeb a videí ↗</a>
-<a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">Oficiální YouTube kanál iced out PTK ↗</a>
-</div>
-<div class="note">Tento web je neoficiální fanouškovský projekt. Není provozován, schválen ani spravován interpretem PTK. Fotografie, hudba, názvy a ochranné známky patří jejich příslušným vlastníkům. Informace jsou uvedeny pro informativní a encyklopedické účely.</div>
-</div></section>
+        <div class="hero-bottom">
+            <span>PTK</span>
+            <span>Music archive</span>
+            <span>Since 2013</span>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- WIKI -->
+
+<section class="section" id="wiki">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">01 / Encyclopedia</div>
+                <h2>Wiki.</h2>
+                <p class="section-description">
+                    PTK, vlastním jménem Patrik Aišman, je český rapper pocházející z Chebu.
+                    Ve své tvorbě vychází z osobních zkušeností a vlastního života.
+                    Postupně si vybudoval publikum prostřednictvím SoundCloudu,
+                    YouTube a streamovacích platforem.
+                </p>
+            </div>
+            <div class="section-side">Artist overview / 01</div>
+        </div>
+
+        <div class="grid">
+
+            <article class="card reveal">
+                <span class="card-tag">01 — Původ</span>
+                <h3>Chebské kořeny</h3>
+                <p>PTK pochází z Chebu. V rozhovoru pro Chebský deník popsal své rodné město jako místo, kde jeho příběh začal a ke kterému má osobní vztah.</p>
+            </article>
+
+            <article class="card reveal">
+                <span class="card-tag">02 — Tvorba</span>
+                <h3>„Píšu, co žiju“</h3>
+                <p>Jeho hudba úzce souvisí s osobním životem, prožitými etapami a zkušenostmi. Texty podle něj vycházejí z toho, co skutečně žije.</p>
+            </article>
+
+            <article class="card reveal">
+                <span class="card-tag">03 — Začátky</span>
+                <h3>Nezávislá cesta</h3>
+                <p>Mezi rané projekty patří mixtape YoungMotherFucker z roku 2013 a Do konce zásob z roku 2015.</p>
+            </article>
+
+            <article class="card reveal">
+                <span class="card-tag">04 — Průlom</span>
+                <h3>Nevezmu tě z klubu domů</h3>
+                <p>Videotrilogie z let 2017–2018 patří k zásadním momentům jeho kariéry a pomohla dostat PTK do širšího povědomí posluchačů.</p>
+            </article>
+
+            <article class="card reveal">
+                <span class="card-tag">05 — Image</span>
+                <h3>ICEDOUT</h3>
+                <p>Vedle hudby se věnuje také módě. Vlastní značku ICEDOUT začal budovat kolem roku 2017.</p>
+            </article>
+
+            <article class="card reveal">
+                <span class="card-tag">06 — Vydávání</span>
+                <h3>Vlastní kanál</h3>
+                <p>Videoklipy publikuje na YouTube kanálu iced out PTK. Hudbu vydává také na Spotify a Apple Music pod jménem P T K.</p>
+            </article>
+
+        </div>
+
+        <div class="note reveal">
+            Tento web je neoficiální fanouškovský archiv. Informace jsou sestavené z veřejně dostupných zdrojů.
+            U údajů, které se mezi databázemi rozcházejí, je rozpor označen.
+        </div>
+
+    </div>
+</section>
+
+
+<!-- INFO -->
+
+<section class="section" id="info">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">02 / Artist profile</div>
+                <h2>Základní info.</h2>
+                <p class="section-description">
+                    Základní veřejně uváděné údaje o interpretovi.
+                </p>
+            </div>
+            <div class="section-side">Personal information / 02</div>
+        </div>
+
+        <div class="facts">
+
+            <div class="fact reveal">
+                <span class="fact-label">Umělecké jméno</span>
+                <strong>PTK / P T K</strong>
+            </div>
+
+            <div class="fact reveal">
+                <span class="fact-label">Jméno</span>
+                <strong>Patrik Aišman</strong>
+            </div>
+
+            <div class="fact reveal">
+                <span class="fact-label">Původ</span>
+                <strong>Cheb, Česko</strong>
+            </div>
+
+            <div class="fact reveal">
+                <span class="fact-label">Hudební oblast</span>
+                <strong>Rap / Trap</strong>
+            </div>
+
+        </div>
+
+        <div class="note reveal">
+            Datum narození: hudební databáze CS Music a Qobuz uvádějí 12. 1. 1994,
+            zatímco eXtra.cz uvádí rok 1995. Proto zde datum není prezentováno
+            jako definitivně ověřený údaj.
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CAREER -->
+
+<section class="section" id="career">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">03 / Timeline</div>
+                <h2>Kariéra.</h2>
+                <p class="section-description">
+                    Výběr důležitých veřejně doložených milníků.
+                    Nejde o úplný seznam všech vydání ani vystoupení.
+                </p>
+            </div>
+            <div class="section-side">2013 — 2026</div>
+        </div>
+
+        <div class="timeline">
+
+            <div class="event reveal">
+                <div class="event-year">2013</div>
+                <h3>YoungMotherFucker</h3>
+                <p>Rané mixtape vydané na SoundCloudu.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2015</div>
+                <h3>Do konce zásob</h3>
+                <p>Další raný projekt a začátek pravidelnějšího vydávání.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2017–2018</div>
+                <h3>Nevezmu tě z klubu domů</h3>
+                <p>Videotrilogie, která výrazně rozšířila jeho dosah na YouTube.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2018</div>
+                <h3>Od Chebu po Ostravu</h3>
+                <p>Období koncertování a stejnojmenné tour.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2021</div>
+                <h3>27 · Utopený v čase · Bad Vibe</h3>
+                <p>Rok výrazných albových vydání, která rozšířila jeho diskografii.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2022</div>
+                <h3>Trappin Lonely</h3>
+                <p>Další studiový projekt a pokračování samostatné tvorby.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2023</div>
+                <h3>Golden Hill · Trap Menu · Silent Kill</h3>
+                <p>Rok několika projektů včetně spolupráce se Slugerrem na Trap Menu.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2024</div>
+                <h3>Painkillers</h3>
+                <p>Společné album s Yzomandiasem, vydané v listopadu 2024.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2025</div>
+                <h3>Karakoram</h3>
+                <p>Vydání sólového alba Karakoram.</p>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-year">2026</div>
+                <h3>Karakoram DLC a další singly</h3>
+                <p>V roce 2026 následovala rozšířená verze Karakoram DLC a nové videoklipy, mimo jiné Rayman, Kenpachi&Yachiru a Gone.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- MUSIC -->
+
+<section class="section" id="music">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">04 / Discography</div>
+                <h2>Hudba & alba.</h2>
+                <p class="section-description">
+                    Výběr známých albových a společných projektů.
+                    Katalog není kompletním seznamem všech singlů.
+                </p>
+            </div>
+            <div class="section-side">Selected releases</div>
+        </div>
+
+        <div class="album-grid">
+
+            <div class="album reveal">
+                <div class="album-cover"><span>27</span></div>
+                <div class="album-info"><strong>27</strong><small>2021 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Utopený<br>v čase</span></div>
+                <div class="album-info"><strong>Utopený v čase</strong><small>2021 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Bad<br>Vibe</span></div>
+                <div class="album-info"><strong>Bad Vibe</strong><small>2021 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Trappin<br>Lonely</span></div>
+                <div class="album-info"><strong>Trappin Lonely</strong><small>2022 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Golden<br>Hill</span></div>
+                <div class="album-info"><strong>Golden Hill</strong><small>2023 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Trap<br>Menu</span></div>
+                <div class="album-info"><strong>Trap Menu · Slugerr</strong><small>2023 · Společný projekt</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Silent<br>Kill</span></div>
+                <div class="album-info"><strong>Silent Kill</strong><small>2023 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Pain<br>killers</span></div>
+                <div class="album-info"><strong>Painkillers · Yzomandias</strong><small>2024 · Společné album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Kara<br>koram</span></div>
+                <div class="album-info"><strong>Karakoram</strong><small>2025 · Album</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Karakoram<br>DLC</span></div>
+                <div class="album-info"><strong>Karakoram DLC</strong><small>2026 · Rozšířená edice</small></div>
+            </div>
+
+            <div class="album reveal">
+                <div class="album-cover"><span>Kurvy v<br>pozoru</span></div>
+                <div class="album-info"><strong>Kurvy v pozoru</strong><small>2026 · Vydání uváděné v katalogu Qobuz</small></div>
+            </div>
+
+        </div>
+
+        <div class="note reveal">
+            Rané projekty: YoungMotherFucker (2013), Do konce zásob (2015),
+            A Jedeš (2018), Období Proměnný (2019), Inferno (2019),
+            Musim Zvládnout 3 (2019). Katalogy se mohou lišit v tom,
+            zda projekt řadí mezi album, mixtape nebo EP.
+        </div>
+
+    </div>
+</section>
+
+
+<!-- VIDEOS -->
+
+<section class="section" id="videos">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">05 / Official videos</div>
+                <h2>Videoklipy.</h2>
+                <p class="section-description">
+                    Výběr známých videoklipů a novějších vydání.
+                    Vyhledej konkrétní skladbu a otevři ji na YouTube.
+                </p>
+            </div>
+            <div class="section-side">Watch / Discover</div>
+        </div>
+
+        <div class="video-toolbar reveal">
+            <input
+                class="search-box"
+                type="search"
+                id="videoSearch"
+                placeholder="Hledat skladbu..."
+                autocomplete="off"
+            >
+            <span class="video-count" id="videoCount">15 videoklipů</span>
+        </div>
+
+        <div class="video-grid" id="videoGrid">
+
+            <a class="video reveal" data-title="nevezmu tě z klubu domů 3" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+3+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Nevezmu tě<br>z klubu domů 3</span></div>
+                <div class="video-info"><strong>Nevezmu tě z klubu domů 3</strong><small>2017–2018 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="nevezmu tě z klubu domů 2" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+2+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Nevezmu tě<br>z klubu domů 2</span></div>
+                <div class="video-info"><strong>Nevezmu tě z klubu domů 2</strong><small>2017 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="nevezmu tě z klubu domů" href="https://www.youtube.com/results?search_query=PTK+Nevezmu+te+z+klubu+domu+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Nevezmu tě<br>z klubu domů</span></div>
+                <div class="video-info"><strong>Nevezmu tě z klubu domů</strong><small>2017 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="krvácej na zemi" href="https://www.youtube.com/results?search_query=PTK+Krva+cej+na+zemi+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Krvácej<br>na zemi</span></div>
+                <div class="video-info"><strong>Krvácej na zemi</strong><small>2018 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="baby a benzo yzomandias" href="https://www.youtube.com/results?search_query=PTK+Baby+Benzo+Yzomandias+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Baby &<br>Benzo</span></div>
+                <div class="video-info"><strong>Baby&Benzo feat. Yzomandias</strong><small>2022 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="střízlivý" href="https://www.youtube.com/results?search_query=PTK+Strizlivy+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Střízlivý</span></div>
+                <div class="video-info"><strong>Střízlivý</strong><small>2021 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="sunset separ" href="https://www.youtube.com/results?search_query=Separ+PTK+Sunset+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Sunset</span></div>
+                <div class="video-info"><strong>Sunset · Separ feat. PTK</strong><small>2023 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="nikdy broke slugerr" href="https://www.youtube.com/results?search_query=PTK+Slugerr+Nikdy+Broke+official" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Nikdy<br>Broke</span></div>
+                <div class="video-info"><strong>Nikdy Broke</strong><small>2023 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="silent kill" href="https://www.youtube.com/results?search_query=PTK+Silent+Kill+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Silent<br>Kill</span></div>
+                <div class="video-info"><strong>Silent Kill</strong><small>2023 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="painkillers" href="https://www.youtube.com/results?search_query=PTK+Yzomandias+Painkillers+official+music+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Painkillers</span></div>
+                <div class="video-info"><strong>Painkillers</strong><small>2024 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="ksn" href="https://www.youtube.com/results?search_query=PTK+KSN+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>KSN</span></div>
+                <div class="video-info"><strong>KSN</strong><small>2025 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="kenpachi yachiru" href="https://www.youtube.com/results?search_query=PTK+Kenpachi+Yachiru+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Kenpachi<br>& Yachiru</span></div>
+                <div class="video-info"><strong>Kenpachi&Yachiru</strong><small>2026 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="rayman" href="https://www.youtube.com/results?search_query=PTK+Rayman+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Rayman</span></div>
+                <div class="video-info"><strong>Rayman</strong><small>2026 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="gone kairo keyz" href="https://www.youtube.com/results?search_query=PTK+Kairo+Keyz+Gone+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Gone</span></div>
+                <div class="video-info"><strong>Gone · Kairo Keyz</strong><small>2026 · Official video</small></div>
+            </a>
+
+            <a class="video reveal" data-title="nádech" href="https://www.youtube.com/results?search_query=PTK+nadech+official+video" target="_blank" rel="noopener">
+                <div class="video-thumb"><span>Nádech</span></div>
+                <div class="video-info"><strong>Nádech</strong><small>2026 · Official video</small></div>
+            </a>
+
+        </div>
+
+        <div class="no-results" id="noResults">
+            Pro tento název jsme nic nenašli.
+        </div>
+
+        <div class="note reveal">
+            Náhledy jsou graficky vytvořené přímo v HTML, nejsou to oficiální YouTube miniatury.
+            Odkazy vedou na vyhledávání konkrétní skladby na YouTube.
+            Přesné náhledy, počty zhlédnutí a přímé odkazy lze doplnit po ověření konkrétních videí.
+        </div>
+
+    </div>
+</section>
+
+
+<!-- COLLABORATIONS -->
+
+<section class="section" id="collabs">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">06 / People & projects</div>
+                <h2>Spolupráce.</h2>
+                <p class="section-description">
+                    Výběr jmen a společných projektů, které se objevují
+                    ve veřejných zdrojích a diskografii.
+                </p>
+            </div>
+            <div class="section-side">Artists / Connections</div>
+        </div>
+
+        <div class="grid">
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Dlouhodobá spolupráce</span>
+                <h3>Slugerr</h3>
+                <p>PTK v rozhovoru popsal Slugerra jako blízkého člověka, se kterým spolupracuje od začátků. Společně vydali projekt Trap Menu.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Společné album</span>
+                <h3>Yzomandias</h3>
+                <p>Společné album Painkillers vyšlo v listopadu 2024. Spolupráce navázala také na track Baby&Benzo.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Hostování</span>
+                <h3>Separ</h3>
+                <p>PTK se objevil na skladbě Sunset, která patří mezi výrazné streamované spolupráce.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Další jména</span>
+                <h3>Viktor Sheen</h3>
+                <p>Jméno uváděné mezi hosty a spolupracovníky v souvislosti s projektem Silent Kill a jeho tracklistem.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Další jména</span>
+                <h3>Calin & Nik Tendo</h3>
+                <p>Další interpreti spojovaní s hostováním a spolupracemi v rámci PTK tvorby.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Tým</span>
+                <h3>Capitan Elda</h3>
+                <p>Manažer a dlouholetý spolupracovník. Společně se podíleli na koncertech, videoklipech, distribuci a PR.</p>
+            </article>
+
+            <article class="card collab-card reveal">
+                <span class="card-tag">Vizuál</span>
+                <h3>Filip Nguyen</h3>
+                <p>Blízký kamarád a kameraman. V rozhovoru uvedl, že se s PTK znají od dětství.</p>
+            </article>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ICEDOUT -->
+
+<section class="brand-section" id="icedout">
+    <div class="wrap">
+
+        <div class="brand-box reveal">
+
+            <div class="section-number">07 / Fashion & identity</div>
+
+            <h2>ICEDOUT.</h2>
+
+            <p>
+                PTK se vedle hudby věnuje také módě.
+                V rozhovoru pro Chebský deník uvedl, že první kusy oblečení
+                začal dělat kolem roku 2017. Značka měla nabídnout
+                odlišný styl a osobní pohled na módu.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn btn-white" href="https://www.icedout.cz/" target="_blank" rel="noopener">ICEDOUT web ↗</a>
+                <a class="btn" href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube ↗</a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- SOURCES -->
+
+<section class="section" id="sources">
+    <div class="wrap">
+
+        <div class="section-head reveal">
+            <div>
+                <div class="section-number">08 / References</div>
+                <h2>Zdroje.</h2>
+                <p class="section-description">
+                    Veřejné zdroje použité pro sestavení informací
+                    a další rozšiřování archivu.
+                </p>
+            </div>
+            <div class="section-side">Research / References</div>
+        </div>
+
+        <div class="source-list reveal">
+
+            <a href="https://chebsky.denik.cz/zpravy_region/chebsky-rodak-raper-ptk-je-na-hudebnim-vzestupu-pysni-se-i-svou-modni-znackou-20.html" target="_blank" rel="noopener">
+                Chebský deník — rozhovor s PTK (2022)
+                <span>↗</span>
+            </a>
+
+            <a href="https://www.csmusic.cz/int-5686-ptk" target="_blank" rel="noopener">
+                CS Music — profil a diskografie
+                <span>↗</span>
+            </a>
+
+            <a href="https://www.qobuz.com/us-en/interpreter/p-t-k/9222508" target="_blank" rel="noopener">
+                Qobuz — profil a katalog vydání
+                <span>↗</span>
+            </a>
+
+            <a href="https://www.kworb.net/spotify/artist/5iYtjtFv6SvHX95ny4fVEz_songs.html" target="_blank" rel="noopener">
+                Kworb — statistiky Spotify
+                <span>↗</span>
+            </a>
+
+            <a href="https://asknaveen.com/channel/%40icedoutptk" target="_blank" rel="noopener">
+                iced out PTK — přehled videí kanálu
+                <span>↗</span>
+            </a>
+
+            <a href="https://www.theculture.cz/interpreti/ptk" target="_blank" rel="noopener">
+                The Culture — profil interpreta
+                <span>↗</span>
+            </a>
+
+            <a href="https://popnable.com/czech-republic/artists/35053-ptk/songs" target="_blank" rel="noopener">
+                Popnable — seznam skladeb a videí
+                <span>↗</span>
+            </a>
+
+            <a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">
+                Oficiální YouTube kanál iced out PTK
+                <span>↗</span>
+            </a>
+
+        </div>
+
+        <div class="note reveal">
+            PTK ARCHIVE je neoficiální fanouškovský projekt.
+            Není provozován, schválen ani spravován interpretem PTK.
+            Fotografie, hudba, názvy a ochranné známky patří jejich příslušným vlastníkům.
+            Informace jsou uvedeny pro informativní a encyklopedické účely.
+        </div>
+
+    </div>
+</section>
+
 </main>
-<footer><div class="wrap footer-row"><span>© PTK ARCHIVE · UNOFFICIAL FAN PROJECT</span><span>BLACK / GRAPHITE / WHITE</span><a href="#top">Zpět nahoru ↑</a></div></footer>
-<button class="backtop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Zpět nahoru">↑</button>
+
+
+<!-- FOOTER -->
+
+<footer>
+    <div class="wrap">
+
+        <div class="footer-top">
+
+            <a href="#top" class="footer-logo">PTK ARCHIVE.</a>
+
+            <div class="footer-links">
+                <a href="#wiki">Wiki</a>
+                <a href="#music">Hudba</a>
+                <a href="#videos">Videa</a>
+                <a href="#sources">Zdroje</a>
+                <a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">YouTube ↗</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <span>© <span id="year"></span> PTK ARCHIVE</span>
+            <span>Unofficial fan-made project</span>
+            <span>Black / Graphite / White</span>
+        </div>
+
+    </div>
+</footer>
+
+
+<button class="backtop" id="backtop" aria-label="Zpět nahoru">↑</button>
+
+
 <script>
-const menuBtn=document.getElementById('menuBtn'),nav=document.getElementById('navlinks');
-menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
-nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
-const search=document.getElementById('videoSearch'),cards=[...document.querySelectorAll('.video')],count=document.getElementById('videoCount');
-search.addEventListener('input',()=>{const q=search.value.toLocaleLowerCase('cs');let n=0;cards.forEach(card=>{const show=card.dataset.title.toLocaleLowerCase('cs').includes(q);card.style.display=show?'':'none';if(show)n++});count.textContent=n+' videí'});
+
+/* MOBILE MENU */
+
+const menuBtn = document.getElementById("menuBtn");
+const nav = document.getElementById("navlinks");
+
+menuBtn.addEventListener("click", () => {
+    nav.classList.toggle("open");
+    menuBtn.textContent = nav.classList.contains("open") ? "✕" : "☰";
+});
+
+nav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        nav.classList.remove("open");
+        menuBtn.textContent = "☰";
+    });
+});
+
+
+/* VIDEO SEARCH */
+
+const search = document.getElementById("videoSearch");
+const videos = [...document.querySelectorAll(".video")];
+const videoCount = document.getElementById("videoCount");
+const noResults = document.getElementById("noResults");
+
+function filterVideos() {
+
+    const query = search.value
+        .toLocaleLowerCase("cs")
+        .trim();
+
+    let visible = 0;
+
+    videos.forEach(video => {
+
+        const title = video.dataset.title.toLocaleLowerCase("cs");
+        const show = title.includes(query);
+
+        video.style.display = show ? "" : "none";
+
+        if (show) visible++;
+
+    });
+
+    videoCount.textContent = visible + " / " + videos.length + " videí";
+
+    noResults.style.display = visible === 0 ? "block" : "none";
+
+}
+
+search.addEventListener("input", filterVideos);
+
+
+/* SCROLL PROGRESS */
+
+const progress = document.getElementById("progress");
+
+function updateProgress() {
+
+    const scrollTop = window.scrollY;
+
+    const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+    const percentage = maxScroll > 0
+        ? (scrollTop / maxScroll) * 100
+        : 0;
+
+    progress.style.width = percentage + "%";
+
+}
+
+window.addEventListener("scroll", updateProgress);
+
+
+/* BACK TO TOP */
+
+const backtop = document.getElementById("backtop");
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 500) {
+        backtop.classList.add("visible");
+    } else {
+        backtop.classList.remove("visible");
+    }
+
+});
+
+backtop.addEventListener("click", () => {
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+});
+
+
+/* SCROLL REVEAL */
+
+const revealObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            entry.target.classList.add("show");
+
+            revealObserver.unobserve(entry.target);
+
+        }
+
+    });
+
+}, {
+    threshold: 0.12
+});
+
+document.querySelectorAll(".reveal").forEach(element => {
+    revealObserver.observe(element);
+});
+
+
+/* ACTIVE NAVIGATION */
+
+const sections = document.querySelectorAll(
+    "#wiki, #info, #career, #music, #videos, #collabs, #icedout"
+);
+
+const navLinks = document.querySelectorAll(".navlinks a");
+
+const activeObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const currentId = entry.target.id;
+
+            navLinks.forEach(link => {
+
+                link.classList.toggle(
+                    "active",
+                    link.getAttribute("href") === "#" + currentId
+                );
+
+            });
+
+        }
+
+    });
+
+}, {
+    rootMargin: "-30% 0px -60% 0px"
+});
+
+sections.forEach(section => {
+    activeObserver.observe(section);
+});
+
+
+/* CURRENT YEAR */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
 </script>
+
 </body>
 </html>
