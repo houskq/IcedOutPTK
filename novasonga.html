@@ -8,816 +8,324 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="PTK – nádech. Přehrávač a synchronizovaný text skladby na PTK ARCHIVE.">
 <title>PTK – nádech | PTK ARCHIVE</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-:root{
-    --bg:#050505;
-    --white:#f4f4f4;
-    --muted:#858585;
-    --line:rgba(255,255,255,.12);
-    --ease:cubic-bezier(.2,.8,.2,1);
-}
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-html{
-    min-height:100%;
-    background:var(--bg);
-    scroll-behavior:smooth;
-}
-
-body{
-    min-height:100vh;
-    background:radial-gradient(ellipse at 50% -15%,rgba(255,255,255,.12),transparent 48%),#050505;
-    color:var(--white);
-    font-family:"DM Sans",sans-serif;
-    line-height:1.6;
-    overflow-x:hidden;
-}
-
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    pointer-events:none;
-    background:
-        radial-gradient(ellipse at 0 80%,rgba(255,255,255,.035),transparent 40%),
-        radial-gradient(ellipse at 100% 50%,rgba(255,255,255,.035),transparent 42%);
-}
-
-a{
-    color:inherit;
-    text-decoration:none;
-}
-
-button{
-    font:inherit;
-    cursor:pointer;
-    color:inherit;
-}
-
-.topbar{
-    height:76px;
-    border-bottom:1px solid var(--line);
-    background:rgba(5,5,5,.72);
-    backdrop-filter:blur(24px);
-    display:flex;
-    align-items:center;
-}
-
-.nav{
-    width:min(1180px,calc(100% - 44px));
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.brand{
-    font:700 14px "Space Grotesk";
-    letter-spacing:.17em;
-}
-
-.brand span{
-    color:#777;
-    font-weight:400;
-}
-
-.back{
-    color:#999;
-    font-size:10px;
-    letter-spacing:.13em;
-    text-transform:uppercase;
-    transition:.2s;
-}
-
-.back:hover{
-    color:white;
-}
-
-main{
-    width:min(1120px,calc(100% - 44px));
-    margin:0 auto;
-    padding:65px 0 90px;
-}
-
-.eyebrow{
-    color:#888;
-    font-size:9px;
-    font-weight:800;
-    letter-spacing:.25em;
-    text-transform:uppercase;
-}
-
-.heading{
-    margin:12px 0 34px;
-    font:700 clamp(45px,8vw,88px)/.95 "Space Grotesk";
-    letter-spacing:-.085em;
-}
-
-.heading span{
-    color:#777;
-}
-
-.player-layout{
-    display:grid;
-    grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);
-    gap:34px;
-    align-items:start;
-}
-
-.player-panel{
-    position:sticky;
-    top:28px;
-    border:1px solid var(--line);
-    border-radius:22px;
-    padding:18px;
-    background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018));
-    box-shadow:inset 0 1px rgba(255,255,255,.06);
-}
-
-.cover{
-    position:relative;
-    aspect-ratio:1;
-    border-radius:14px;
-    overflow:hidden;
-    background:#151515;
-}
-
-.cover img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-
-.cover::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    background:linear-gradient(0deg,rgba(0,0,0,.28),transparent 60%);
-}
-
-.youtube-frame{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:2;
-}
-
-.youtube-frame iframe{
-    width:100%;
-    height:100%;
-    border:0;
-    display:block;
-}
-
-.track-info{
-    padding:22px 4px 17px;
-}
-
-.track-info h2{
-    font:700 37px/1 "Space Grotesk";
-    letter-spacing:-.07em;
-    margin-bottom:7px;
-}
-
-.track-info p{
-    font-size:11px;
-    color:#888;
-    letter-spacing:.08em;
-}
-
-.player-controls{
-    display:flex;
-    align-items:center;
-    gap:16px;
-}
-
-.play-button{
-    width:54px;
-    height:54px;
-    border:0;
-    border-radius:50%;
-    background:#f3f3f3;
-    color:#050505;
-    font-size:19px;
-    display:grid;
-    place-items:center;
-    transition:transform .25s,background .25s;
-    flex:0 0 54px;
-}
-
-.play-button:hover{
-    transform:scale(1.06);
-    background:#fff;
-}
-
-.play-button:disabled{
-    opacity:.45;
-    cursor:wait;
-    transform:none;
-}
-
-.timeline{
-    flex:1;
-    min-width:0;
-}
-
-.time-row{
-    display:flex;
-    justify-content:space-between;
-    color:#777;
-    font:10px "Space Grotesk";
-    margin-bottom:8px;
-}
-
-.seek{
-    width:100%;
-    height:4px;
-    border-radius:10px;
-    background:rgba(255,255,255,.18);
-    appearance:none;
-    outline:none;
-    cursor:pointer;
-}
-
-.seek::-webkit-slider-thumb{
-    appearance:none;
-    width:11px;
-    height:11px;
-    border-radius:50%;
-    background:#fff;
-    box-shadow:0 0 10px rgba(255,255,255,.4);
-}
-
-.seek::-moz-range-thumb{
-    width:11px;
-    height:11px;
-    border:0;
-    border-radius:50%;
-    background:#fff;
-}
-
-.player-note{
-    margin:17px 3px 2px;
-    color:#666;
-    font-size:9px;
-    line-height:1.7;
-}
-
-.player-note a{
-    color:#bbb;
-    text-decoration:underline;
-    text-underline-offset:3px;
-}
-
-.lyrics-panel{
-    border:1px solid var(--line);
-    border-radius:22px;
-    padding:30px;
-    background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
-    min-height:500px;
-}
-
-.lyrics-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
-    padding-bottom:22px;
-    border-bottom:1px solid var(--line);
-}
-
-.lyrics-top h3{
-    font:600 20px "Space Grotesk";
-    letter-spacing:-.04em;
-}
-
-.sync-label{
-    font-size:8px;
-    letter-spacing:.15em;
-    text-transform:uppercase;
-    color:#777;
-    border:1px solid var(--line);
-    border-radius:30px;
-    padding:7px 10px;
-}
-
-.lyrics-content{
-    padding:30px 0;
-    min-height:390px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:15px;
-}
-
-.lyric-line{
-    font:700 clamp(20px,3vw,30px)/1.35 "Space Grotesk";
-    letter-spacing:-.045em;
-    color:#454545;
-    transition:color .25s,transform .25s,opacity .25s;
-    transform-origin:left;
-    cursor:pointer;
-}
-
-.lyric-line.active{
-    color:#fff;
-    transform:translateX(7px);
-}
-
-.lyric-line.past{
-    color:#999;
-}
-
-.lyrics-empty{
-    max-width:440px;
-    color:#777;
-    font-size:13px;
-    line-height:1.9;
-}
-
-.lyrics-empty strong{
-    display:block;
-    color:#ddd;
-    font:600 22px "Space Grotesk";
-    margin-bottom:10px;
-}
-
-.footer{
-    border-top:1px solid var(--line);
-    padding:24px 0;
-    color:#666;
-    font-size:9px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-}
-
-.footer-inner{
-    width:min(1120px,calc(100% - 44px));
-    margin:auto;
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-@media(max-width:760px){
-    main{
-        padding-top:42px;
-    }
-
-    .player-layout{
-        grid-template-columns:1fr;
-        gap:18px;
-    }
-
-    .player-panel{
-        position:relative;
-        top:auto;
-        max-width:520px;
-        width:100%;
-        margin:auto;
-    }
-
-    .lyrics-panel{
-        min-height:350px;
-        padding:23px;
-    }
-
-    .lyrics-content{
-        min-height:250px;
-    }
-
-    .heading{
-        margin-bottom:25px;
-    }
-}
-
-@media(prefers-reduced-motion:reduce){
-    *,
-    *::before,
-    *::after{
-        scroll-behavior:auto!important;
-        transition:none!important;
-    }
-}
+:root{--bg:#050505;--white:#f4f4f4;--muted:#858585;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{min-height:100%;background:var(--bg);scroll-behavior:smooth}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,rgba(255,255,255,.12),transparent 48%),#050505;color:var(--white);font-family:"DM Sans",sans-serif;line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 0 80%,rgba(255,255,255,.035),transparent 40%),radial-gradient(ellipse at 100% 50%,rgba(255,255,255,.035),transparent 42%)}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
+.topbar{height:76px;border-bottom:1px solid var(--line);background:rgba(5,5,5,.72);backdrop-filter:blur(24px);display:flex;align-items:center}
+.nav{width:min(1180px,calc(100% - 44px));margin:auto;display:flex;align-items:center;justify-content:space-between}
+.brand{font:700 14px "Space Grotesk";letter-spacing:.17em}.brand span{color:#777;font-weight:400}
+.back{color:#999;font-size:10px;letter-spacing:.13em;text-transform:uppercase;transition:.2s}.back:hover{color:white}
+main{width:min(1120px,calc(100% - 44px));margin:0 auto;padding:65px 0 90px}
+.eyebrow{color:#888;font-size:9px;font-weight:800;letter-spacing:.25em;text-transform:uppercase}
+.heading{margin:12px 0 34px;font:700 clamp(45px,8vw,88px)/.95 "Space Grotesk";letter-spacing:-.085em}.heading span{color:#777}
+.player-layout{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:34px;align-items:start}
+.player-panel{position:sticky;top:28px;border:1px solid var(--line);border-radius:22px;padding:18px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018));box-shadow:inset 0 1px rgba(255,255,255,.06)}
+.cover{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#151515}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.28),transparent 60%)}
+.youtube-frame{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.youtube-frame iframe{width:100%;height:100%;border:0;display:block}
+.track-info{padding:22px 4px 17px}.track-info h2{font:700 37px/1 "Space Grotesk";letter-spacing:-.07em;margin-bottom:7px}
+.track-info p{font-size:11px;color:#888;letter-spacing:.08em}
+.player-controls{display:flex;align-items:center;gap:16px}
+.play-button{width:54px;height:54px;border:0;border-radius:50%;background:#f3f3f3;color:#050505;font-size:19px;display:grid;place-items:center;transition:transform .25s,background .25s;flex:0 0 54px}
+.play-button:hover{transform:scale(1.06);background:#fff}.play-button:disabled{opacity:.45;cursor:wait;transform:none}
+.timeline{flex:1;min-width:0}.time-row{display:flex;justify-content:space-between;color:#777;font:10px "Space Grotesk";margin-bottom:8px}
+.seek{width:100%;height:4px;border-radius:10px;background:rgba(255,255,255,.18);appearance:none;outline:none;cursor:pointer}
+.seek::-webkit-slider-thumb{appearance:none;width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.4)}
+.seek::-moz-range-thumb{width:11px;height:11px;border:0;border-radius:50%;background:#fff}
+.player-note{margin:17px 3px 2px;color:#666;font-size:9px;line-height:1.7}.player-note a{color:#bbb;text-decoration:underline;text-underline-offset:3px}
+.lyrics-panel{border:1px solid var(--line);border-radius:22px;padding:30px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));min-height:500px}
+.lyrics-top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.lyrics-top h3{font:600 20px "Space Grotesk";letter-spacing:-.04em}
+.sync-label{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#777;border:1px solid var(--line);border-radius:30px;padding:7px 10px}
+.lyrics-content{padding:30px 0;min-height:390px;display:flex;flex-direction:column;justify-content:center;gap:15px}
+.lyric-line{font:700 clamp(20px,3vw,30px)/1.35 "Space Grotesk";letter-spacing:-.045em;color:#454545;transition:color .25s,transform .25s,opacity .25s;transform-origin:left;cursor:pointer}
+.lyric-line.active{color:#fff;transform:translateX(7px)}.lyric-line.past{color:#999}
+.footer{border-top:1px solid var(--line);padding:24px 0;color:#666;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.footer-inner{width:min(1120px,calc(100% - 44px));margin:auto;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+@media(max-width:760px){main{padding-top:42px}.player-layout{grid-template-columns:1fr;gap:18px}.player-panel{position:relative;top:auto;max-width:520px;width:100%;margin:auto}.lyrics-panel{min-height:350px;padding:23px}.lyrics-content{min-height:250px}.heading{margin-bottom:25px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
-<header class="topbar">
-    <div class="nav">
-        <a class="brand" href="index.html">PTK <span>ARCHIVE</span></a>
-        <a class="back" href="index.html">← Zpět do archivu</a>
-    </div>
-</header>
+<header class="topbar"><div class="nav">
+<a class="brand" href="index.html">PTK <span>ARCHIVE</span></a>
+<a class="back" href="index.html">← Zpět do archivu</a>
+</div></header>
 
 <main>
+<div class="eyebrow">Nejnovější release · 5. 11. 2026</div>
+<h1 class="heading">PTK <span>—</span> nádech.</h1>
 
-    <div class="eyebrow">Nejnovější release · 5. 11. 2026</div>
+<div class="player-layout">
+<section class="player-panel" aria-label="Přehrávač skladby">
+<div class="cover">
+<img src="https://img.youtube.com/vi/a7RlkBX4n6A/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/a7RlkBX4n6A/hqdefault.jpg'" alt="PTK – nádech">
+<div id="youtubePlayer" class="youtube-frame"></div>
+</div>
+<div class="track-info"><h2>nádech</h2><p>PTK · OFFICIALVID · 2:28</p></div>
+<div class="player-controls">
+<button class="play-button" id="playButton" aria-label="Přehrát" disabled>▶</button>
+<div class="timeline">
+<div class="time-row"><span id="currentTime">0:00</span><span id="duration">2:28</span></div>
+<input class="seek" id="seekBar" type="range" min="0" max="148" value="0" step=".1" aria-label="Pozice ve skladbě">
+</div>
+</div>
+<p class="player-note" id="playerNote">Načítám YouTube přehrávač…</p>
+</section>
 
-    <h1 class="heading">PTK <span>—</span> nádech.</h1>
-
-    <div class="player-layout">
-
-        <section class="player-panel" aria-label="Přehrávač skladby">
-
-            <div class="cover">
-
-                <img
-                    src="https://img.youtube.com/vi/a7RlkBX4n6A/maxresdefault.jpg"
-                    onerror="this.src='https://img.youtube.com/vi/a7RlkBX4n6A/hqdefault.jpg'"
-                    alt="PTK – nádech"
-                >
-
-                <div id="youtubePlayer" class="youtube-frame"></div>
-
-            </div>
-
-            <div class="track-info">
-                <h2>nádech</h2>
-                <p>PTK · OFFICIALVID · 2:28</p>
-            </div>
-
-            <div class="player-controls">
-
-                <button
-                    class="play-button"
-                    id="playButton"
-                    aria-label="Přehrát"
-                    disabled
-                >▶</button>
-
-                <div class="timeline">
-
-                    <div class="time-row">
-                        <span id="currentTime">0:00</span>
-                        <span id="duration">2:28</span>
-                    </div>
-
-                    <input
-                        class="seek"
-                        id="seekBar"
-                        type="range"
-                        min="0"
-                        max="148"
-                        value="0"
-                        step=".1"
-                        aria-label="Pozice ve skladbě"
-                    >
-
-                </div>
-
-            </div>
-
-            <p class="player-note" id="playerNote">
-                Načítám YouTube přehrávač…
-                <a href="https://www.youtube.com/watch?v=a7RlkBX4n6A" target="_blank" rel="noopener">
-                    Otevřít skladbu na YouTube
-                </a>
-            </p>
-
-        </section>
-
-        <section class="lyrics-panel" aria-label="Synchronizovaný text skladby">
-
-            <div class="lyrics-top">
-                <h3>Text skladby</h3>
-                <span class="sync-label">SYNCHRONIZACE</span>
-            </div>
-
-            <div class="lyrics-content" id="lyrics">
-
-                <div class="lyrics-empty">
-                    <strong>Text se připravuje.</strong>
-                    Synchronizovaný text bude zvýrazňovat právě přehrávaný řádek a automaticky se posouvat podle skladby.
-                    Pošli mi text skladby a čas, kdy jednotlivé řádky začínají, a doplním ho sem.
-                </div>
-
-            </div>
-
-        </section>
-
-    </div>
-
+<section class="lyrics-panel" aria-label="Synchronizovaný text skladby">
+<div class="lyrics-top"><h3>Text skladby</h3><span class="sync-label">SYNCHRONIZACE</span></div>
+<div class="lyrics-content" id="lyrics"></div>
+</section>
+</div>
 </main>
 
-<footer class="footer">
-    <div class="footer-inner">
-        <span>© <span id="year"></span> PTK ARCHIVE</span>
-        <span>Unofficial fan-made project</span>
-    </div>
-</footer>
+<footer class="footer"><div class="footer-inner">
+<span>© <span id="year"></span> PTK ARCHIVE</span>
+<span>Unofficial fan-made project</span>
+</div></footer>
 
 <script>
 (() => {
-    "use strict";
+"use strict";
 
-    const VIDEO_ID = "a7RlkBX4n6A";
+const VIDEO_ID = "a7RlkBX4n6A";
 
-    // Text a časové značky se doplní z textu dodaného uživatelem.
-    // Formát: { time: počet sekund od začátku, text: "..." }
-    const lyricsData = [];
+// Časy jsou orientační první synchronizace podle dodaného MP3.
+// Jednotkou je sekunda od začátku skladby.
+const lyricsData = [
+    { time: 0.0, text: "Vem si mý boty, nechám tě udělat move" },
+    { time: 4.5, text: "Koukni, kam až Patrik movin', nikdy jsem nedostal boost" },
+    { time: 9.0, text: "A můj bank account plnej, částky, co maj šest nul" },
+    { time: 13.5, text: "Paradox je, nikdy jsem se necejtil hůř" },
+    { time: 18.0, text: "Doba je fucked up, řekni mi, kam se ztratila vášeň?" },
+    { time: 22.5, text: "Tvá hudba kalkul, cashgrab, nikdo nebere vážně" },
+    { time: 27.0, text: "Kolikrát snažil se setřást mý demons, pořád jsou v zádech" },
+    { time: 31.5, text: "Dlouho jsme byli v podzemí, pořád jsme pod vodou, pod vodou bodl by nádech (Fu)" },
+    { time: 36.5, text: "Nebudu lhát, občas jsem faded, nasranej pushovat socials" },
+    { time: 41.5, text: "Půl roku totálně čistej, hlava mi určila, Patrik ted' sober" },
+    { time: 46.5, text: "A víš ty co? Beru to jak další zkoušku, nabírám síly" },
+    { time: 51.5, text: "Jsem na cestě dlouho, bych radši chcíp, než ty, zmrde, couvl" },
+    { time: 56.5, text: "Dokud tu jsem, budu psát na papír pocity, ty, co mám v sobě" },
+    { time: 61.5, text: "Víš, kolik lidí sem savnul? Možná jsem pomoh i tobě" },
+    { time: 66.5, text: "Stoupáme nahoru, potom zas padáme dolů, chyť mě teď, než bude pozdě" },
+    { time: 72.0, text: "Držím mý zmrdy a rodinu pevně do konce, zmrde, než nedaj mě pod zem" },
+    { time: 77.0, text: "Asi jen, asi jen další životní období" },
+    { time: 82.0, text: "Prej, cesta je cíl, ale furt rushuju, ať to mám hotový" },
+    { time: 87.0, text: "Říkám ti věci jak jsou, lži se tu nedovíš" },
+    { time: 92.0, text: "Nežijou život, jen hrotí ten kontent, prodávaj soukromí" },
+    { time: 97.0, text: "Prodávám hadry, jsem udělal z trapu, z malýho pokoje byznys" },
+    { time: 102.0, text: "Dal jsem svým zmrdům a rodině práci, dneska už děláme big shit" },
+    { time: 107.0, text: "Big moves, big deals, skládal jsem na stavbě cihly" },
+    { time: 112.0, text: "Neměli jsme love skoro na nic, za sebou vždycky jsme přišli" },
+    { time: 117.0, text: "Mí zmrdi dodneška běhají venku, maj stejnej mindset, serou na systém" },
+    { time: 122.0, text: "Riskujou krk, každej den tlak, reálnej příběh, co hitne" },
+    { time: 127.0, text: "Nemají život, skrývaj se tak jako hitman" },
+    { time: 132.0, text: "Taky jsem otáčel se jak se moh, hudba mě vytáhla pryč ven" }
+];
 
-    const playButton = document.getElementById("playButton");
-    const seekBar = document.getElementById("seekBar");
-    const currentTimeLabel = document.getElementById("currentTime");
-    const durationLabel = document.getElementById("duration");
-    const lyricsContainer = document.getElementById("lyrics");
-    const playerNote = document.getElementById("playerNote");
+const playButton = document.getElementById("playButton");
+const seekBar = document.getElementById("seekBar");
+const currentTimeLabel = document.getElementById("currentTime");
+const durationLabel = document.getElementById("duration");
+const lyricsContainer = document.getElementById("lyrics");
+const playerNote = document.getElementById("playerNote");
 
-    let player = null;
-    let timer = null;
-    let isSeeking = false;
-    let activeLyric = -1;
-    let playerReady = false;
+let player = null;
+let timer = null;
+let isSeeking = false;
+let activeLyric = -1;
+let playerReady = false;
 
-    const formatTime = seconds => {
-        const safe = Math.max(0, Math.floor(Number(seconds) || 0));
+const formatTime = seconds => {
+    const safe = Math.max(0, Math.floor(Number(seconds) || 0));
+    return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, "0")}`;
+};
 
-        return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, "0")}`;
-    };
+function renderLyrics() {
+    lyricsContainer.innerHTML = "";
 
-    function renderLyrics() {
-        if (!lyricsData.length) return;
+    lyricsData.forEach((line, index) => {
+        const element = document.createElement("div");
+        element.className = "lyric-line";
+        element.textContent = line.text;
+        element.dataset.index = String(index);
 
-        lyricsContainer.innerHTML = "";
-
-        lyricsData.forEach((line, index) => {
-            const element = document.createElement("div");
-
-            element.className = "lyric-line";
-            element.textContent = line.text;
-            element.dataset.index = String(index);
-
-            element.addEventListener("click", () => {
-                if (!playerReady || !player) return;
-
-                player.seekTo(line.time, true);
-                player.playVideo();
-            });
-
-            lyricsContainer.appendChild(element);
-        });
-    }
-
-    function updateLyrics(time) {
-        if (!lyricsData.length) return;
-
-        let next = -1;
-
-        for (let i = 0; i < lyricsData.length; i++) {
-            if (time >= lyricsData[i].time) {
-                next = i;
-            } else {
-                break;
-            }
-        }
-
-        if (next === activeLyric) return;
-
-        activeLyric = next;
-
-        const lines = [...lyricsContainer.querySelectorAll(".lyric-line")];
-
-        lines.forEach((line, index) => {
-            line.classList.toggle("active", index === activeLyric);
-            line.classList.toggle("past", index < activeLyric);
+        element.addEventListener("click", () => {
+            if (!playerReady || !player) return;
+            player.seekTo(line.time, true);
+            player.playVideo();
         });
 
-        const active = lines[activeLyric];
+        lyricsContainer.appendChild(element);
+    });
+}
 
-        if (active) {
-            active.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }
+function updateLyrics(time) {
+    let next = -1;
+
+    for (let i = 0; i < lyricsData.length; i++) {
+        if (time >= lyricsData[i].time) next = i;
+        else break;
     }
 
-    function updatePlayer() {
-        if (!playerReady || !player) return;
+    if (next === activeLyric) return;
+    activeLyric = next;
 
-        try {
-            const current = player.getCurrentTime() || 0;
-            const duration = player.getDuration() || 148;
+    const lines = [...lyricsContainer.querySelectorAll(".lyric-line")];
 
-            currentTimeLabel.textContent = formatTime(current);
-            durationLabel.textContent = formatTime(duration);
+    lines.forEach((line, index) => {
+        line.classList.toggle("active", index === activeLyric);
+        line.classList.toggle("past", index < activeLyric);
+    });
 
-            seekBar.max = String(duration);
+    const active = lines[activeLyric];
+    if (active) active.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 
-            if (!isSeeking) {
-                seekBar.value = String(current);
-            }
+function updatePlayer() {
+    if (!playerReady || !player) return;
 
-            updateLyrics(current);
+    try {
+        const current = player.getCurrentTime() || 0;
+        const duration = player.getDuration() || 148;
 
-        } catch (error) {
-            console.warn("Nepodařilo se aktualizovat přehrávač:", error);
-        }
+        currentTimeLabel.textContent = formatTime(current);
+        durationLabel.textContent = formatTime(duration);
+        seekBar.max = String(duration);
+
+        if (!isSeeking) seekBar.value = String(current);
+        updateLyrics(current);
+    } catch (error) {
+        console.warn("Player update error:", error);
     }
+}
 
-    function startTimer() {
-        stopTimer();
-        timer = setInterval(updatePlayer, 100);
-    }
+function stopTimer() {
+    if (timer) clearInterval(timer);
+    timer = null;
+}
 
-    function stopTimer() {
-        if (timer) {
-            clearInterval(timer);
-        }
+function startTimer() {
+    stopTimer();
+    timer = setInterval(updatePlayer, 100);
+}
 
-        timer = null;
-    }
+function setPlayerError(message) {
+    playButton.disabled = true;
+    playButton.textContent = "▶";
+    playerNote.textContent = message + " ";
 
-    function setPlayerError(message) {
-        playButton.disabled = true;
-        playButton.textContent = "▶";
+    const link = document.createElement("a");
+    link.href = "https://www.youtube.com/watch?v=" + VIDEO_ID;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = "Otevřít na YouTube";
+    playerNote.appendChild(link);
+}
 
-        playerNote.textContent = message + " ";
+window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player("youtubePlayer", {
+        width: "100%",
+        height: "100%",
+        videoId: VIDEO_ID,
+        playerVars: {
+            autoplay: 0,
+            controls: 0,
+            playsinline: 1,
+            rel: 0,
+            modestbranding: 1,
+            enablejsapi: 1,
+            origin: location.origin
+        },
+        events: {
+            onReady: function() {
+                playerReady = true;
+                playButton.disabled = false;
+                playButton.textContent = "▶";
 
-        const link = document.createElement("a");
-        link.href = "https://www.youtube.com/watch?v=" + VIDEO_ID;
-        link.target = "_blank";
-        link.rel = "noopener";
-        link.textContent = "Otevřít na YouTube";
+                const duration = player.getDuration() || 148;
+                durationLabel.textContent = formatTime(duration);
+                seekBar.max = String(duration);
 
-        playerNote.appendChild(link);
-    }
+                playerNote.textContent = "Přehrávání zajišťuje YouTube. ";
 
-    // YouTube IFrame API
-    window.onYouTubeIframeAPIReady = function() {
+                const link = document.createElement("a");
+                link.href = "https://www.youtube.com/watch?v=" + VIDEO_ID;
+                link.target = "_blank";
+                link.rel = "noopener";
+                link.textContent = "Otevřít skladbu na YouTube";
+                playerNote.appendChild(link);
+            },
 
-        const iframe = document.createElement("iframe");
-
-        const embedURL = new URL(
-            "https://www.youtube.com/embed/" + VIDEO_ID
-        );
-
-        embedURL.searchParams.set("enablejsapi", "1");
-        embedURL.searchParams.set("controls", "0");
-        embedURL.searchParams.set("playsinline", "1");
-        embedURL.searchParams.set("rel", "0");
-        embedURL.searchParams.set("modestbranding", "1");
-
-        // GitHub Pages origin – důležité pro komunikaci s YouTube API.
-        if (location.protocol === "https:" || location.protocol === "http:") {
-            embedURL.searchParams.set("origin", location.origin);
-        }
-
-        iframe.id = "youtubeIframe";
-        iframe.src = embedURL.toString();
-        iframe.title = "PTK – nádech";
-        iframe.referrerPolicy = "strict-origin-when-cross-origin";
-        iframe.allow = "autoplay; encrypted-media; picture-in-picture";
-        iframe.allowFullscreen = true;
-
-        const container = document.getElementById("youtubePlayer");
-        container.replaceChildren(iframe);
-
-        player = new YT.Player(iframe, {
-
-            events: {
-
-                onReady: function() {
-
-                    playerReady = true;
-
-                    playButton.disabled = false;
+            onStateChange: function(event) {
+                if (event.data === YT.PlayerState.PLAYING) {
+                    playButton.textContent = "Ⅱ";
+                    playButton.setAttribute("aria-label", "Pozastavit");
+                    startTimer();
+                } else {
                     playButton.textContent = "▶";
                     playButton.setAttribute("aria-label", "Přehrát");
 
-                    const duration = player.getDuration() || 148;
-
-                    durationLabel.textContent = formatTime(duration);
-                    seekBar.max = String(duration);
-
-                    playerNote.textContent = "Přehrávání zajišťuje YouTube. ";
-
-                    const link = document.createElement("a");
-                    link.href = "https://www.youtube.com/watch?v=" + VIDEO_ID;
-                    link.target = "_blank";
-                    link.rel = "noopener";
-                    link.textContent = "Otevřít skladbu na YouTube";
-
-                    playerNote.appendChild(link);
-
-                },
-
-                onStateChange: function(event) {
-
-                    if (event.data === YT.PlayerState.PLAYING) {
-
-                        playButton.textContent = "Ⅱ";
-                        playButton.setAttribute("aria-label", "Pozastavit");
-
-                        startTimer();
-
-                    } else {
-
-                        playButton.textContent = "▶";
-                        playButton.setAttribute("aria-label", "Přehrát");
-
-                        if (
-                            event.data === YT.PlayerState.PAUSED ||
-                            event.data === YT.PlayerState.ENDED
-                        ) {
-                            stopTimer();
-                        }
-
-                        updatePlayer();
+                    if (
+                        event.data === YT.PlayerState.PAUSED ||
+                        event.data === YT.PlayerState.ENDED
+                    ) {
+                        stopTimer();
                     }
 
-                },
-
-                onError: function(event) {
-
-                    console.error("YouTube Player error:", event.data);
-
-                    stopTimer();
-
-                    setPlayerError(
-                        "YouTube přehrávač se nepodařilo spustit."
-                    );
-
+                    updatePlayer();
                 }
+            },
 
+            onError: function(event) {
+                console.error("YouTube Player error:", event.data);
+                stopTimer();
+                setPlayerError("YouTube přehrávač se nepodařilo spustit.");
             }
-
-        });
-
-    };
-
-    // Vlastní tlačítko Play / Pause
-    playButton.addEventListener("click", () => {
-
-        if (!playerReady || !player) return;
-
-        const state = player.getPlayerState();
-
-        if (state === YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-        } else {
-            player.playVideo();
         }
-
     });
+};
 
-    // Posouvání skladby
-    seekBar.addEventListener("input", () => {
+playButton.addEventListener("click", () => {
+    if (!playerReady || !player) return;
 
-        isSeeking = true;
+    const state = player.getPlayerState();
 
-        currentTimeLabel.textContent = formatTime(seekBar.value);
+    if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
+});
 
-    });
+seekBar.addEventListener("input", () => {
+    isSeeking = true;
+    currentTimeLabel.textContent = formatTime(seekBar.value);
+});
 
-    seekBar.addEventListener("change", () => {
+seekBar.addEventListener("change", () => {
+    if (playerReady && player) player.seekTo(Number(seekBar.value), true);
+    isSeeking = false;
+    updatePlayer();
+});
 
-        if (playerReady && player) {
-            player.seekTo(Number(seekBar.value), true);
-        }
+document.getElementById("year").textContent = new Date().getFullYear();
+renderLyrics();
 
-        isSeeking = false;
-
-        updatePlayer();
-
-    });
-
-    // Rok v patičce
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    renderLyrics();
-
-    // Načtení YouTube API
-    const api = document.createElement("script");
-
-    api.src = "https://www.youtube.com/iframe_api";
-    api.async = true;
-
-    api.onerror = () => {
-        setPlayerError("Nepodařilo se načíst YouTube API.");
-    };
-
-    document.head.appendChild(api);
+const api = document.createElement("script");
+api.src = "https://www.youtube.com/iframe_api";
+api.async = true;
+api.onerror = () => setPlayerError("Nepodařilo se načíst YouTube API.");
+document.head.appendChild(api);
 
 })();
 </script>
-
 </body>
 </html>
