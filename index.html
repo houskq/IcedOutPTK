@@ -2153,6 +2153,113 @@ footer {
         filter: none;
     }
 }
+
+
+/* LATEST RELEASE — PTK NÁDECH */
+.latest-release {
+    position: relative;
+    display: grid;
+    grid-template-columns: 118px minmax(0,1fr) auto;
+    align-items: center;
+    gap: 22px;
+    width: min(680px,100%);
+    margin: 0 0 28px;
+    padding: 13px 17px 13px 13px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 17px;
+    background: linear-gradient(110deg,rgba(255,255,255,.105),rgba(255,255,255,.025));
+    box-shadow: 0 18px 60px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.07);
+    backdrop-filter: blur(18px);
+    transition: transform .35s var(--ease),border-color .35s,background .35s;
+}
+.latest-release:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,.55);
+    background: linear-gradient(110deg,rgba(255,255,255,.15),rgba(255,255,255,.04));
+}
+.latest-release-cover {
+    position: relative;
+    width: 118px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #191919;
+}
+.latest-release-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s var(--ease);
+}
+.latest-release:hover .latest-release-cover img { transform: scale(1.07); }
+.latest-release-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,rgba(0,0,0,.04),rgba(0,0,0,.28));
+}
+.latest-release-info { min-width: 0; }
+.latest-release-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .19em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.latest-release-kicker::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,.8);
+}
+.latest-release-info h2 {
+    font: 700 clamp(23px,3.4vw,34px)/1 "Space Grotesk";
+    letter-spacing: -.065em;
+    margin: 0 0 7px;
+}
+.latest-release-meta {
+    color: #888;
+    font-size: 10px;
+    letter-spacing: .05em;
+}
+.latest-release-play {
+    display: grid;
+    place-items: center;
+    width: 47px;
+    height: 47px;
+    flex: 0 0 47px;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 50%;
+    background: #f2f2f2;
+    color: #050505;
+    font-size: 17px;
+    transition: transform .3s,background .3s;
+}
+.latest-release:hover .latest-release-play {
+    transform: scale(1.08);
+    background: #fff;
+}
+@media(max-width:560px) {
+    .latest-release {
+        grid-template-columns: 82px minmax(0,1fr) 39px;
+        gap: 12px;
+        padding: 10px;
+        margin-top: 2px;
+    }
+    .latest-release-cover { width: 82px; border-radius: 8px; }
+    .latest-release-play { width: 39px; height: 39px; flex-basis: 39px; }
+    .latest-release-kicker { font-size: 7px; margin-bottom: 6px; }
+    .latest-release-info h2 { font-size: 23px; }
+    .latest-release-meta { font-size: 9px; }
+}
+
 </style>
 </head>
 
@@ -2232,6 +2339,19 @@ footer {
         <h1>
             <a href="https://www.youtube.com/@icedoutPTK" target="_blank" rel="noopener">PTK</a>
         </h1>
+
+
+        <a class="latest-release reveal" href="novasonga.html" aria-label="Přehrát nejnovější skladbu PTK – nádech">
+            <div class="latest-release-cover">
+                <img src="https://img.youtube.com/vi/a7RlkBX4n6A/hqdefault.jpg" alt="PTK – nádech, náhled videoklipu" loading="eager">
+            </div>
+            <div class="latest-release-info">
+                <div class="latest-release-kicker">Nejnovější release · 5. 11. 2026</div>
+                <h2>nádech</h2>
+                <div class="latest-release-meta">PTK · OFFICIALVID · 2:28</div>
+            </div>
+            <span class="latest-release-play" aria-hidden="true">▶</span>
+        </a>
 
         <p class="hero-description">
             Digitální archiv českého rappera PTK.
