@@ -10,628 +10,1704 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#050505;
-  --fg:#f7f7f7;
-  --muted:#858585;
-  --line:rgba(255,255,255,.17);
-  --panel:rgba(255,255,255,.075);
-  --ease:cubic-bezier(.19,1,.22,1);
+:root{
+ --black:#050505;
+ --white:#f6f6f3;
+ --muted:#888;
+ --line:rgba(255,255,255,.18);
+ --glass:rgba(255,255,255,.055);
+ --ease:cubic-bezier(.19,1,.22,1);
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
 body{
-  background:var(--bg);color:var(--fg);
-  font-family:"DM Sans",sans-serif;
-  transition:background 1.2s var(--ease),color 1.2s var(--ease);
+ background:var(--black);
+ color:var(--white);
+ font-family:"DM Sans",sans-serif;
+ transition:background 1.3s var(--ease),color 1.3s var(--ease);
 }
-body.light{background:#f2f1ed;color:#111}
+body.light{background:#f0efeb;color:#111}
 button{font:inherit}
-#webgl{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.9}
-.grain{
-  position:fixed;inset:-50%;z-index:4;pointer-events:none;opacity:.075;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
-  animation:grain .22s steps(2) infinite;
+button,a{-webkit-tap-highlight-color:transparent}
+#scene{
+ position:fixed;inset:0;width:100%;height:100%;
+ z-index:0;pointer-events:none;
 }
-@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(2%,-1%)}50%{transform:translate(-1%,2%)}75%{transform:translate(1%,1%)}100%{transform:translate(-2%,-1%)}}
-#app{position:relative;z-index:5;width:100%;height:100%;overflow:hidden}
+#grain{
+ position:fixed;inset:-50%;z-index:40;pointer-events:none;
+ opacity:.045;
+ background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+ animation:grain .25s steps(2) infinite;
+}
+@keyframes grain{
+ 0%{transform:translate(0,0)}
+ 25%{transform:translate(2%,-1%)}
+ 50%{transform:translate(-1%,2%)}
+ 75%{transform:translate(1%,1%)}
+ 100%{transform:translate(-2%,-1%)}
+}
+#app{position:relative;width:100%;height:100%;z-index:2;overflow:hidden}
 .topbar{
-  position:fixed;z-index:20;top:0;left:0;width:100%;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:27px 4.5vw;pointer-events:none;
+ position:fixed;z-index:30;left:0;top:0;width:100%;
+ padding:26px 4.5vw;
+ display:flex;align-items:center;justify-content:space-between;
+ pointer-events:none;
 }
-.brand{font:800 13px Manrope,sans-serif;letter-spacing:.22em;text-transform:uppercase}
-.brand span{opacity:.48;font-weight:400}
-.top-right{display:flex;align-items:center;gap:25px;pointer-events:auto}
-.top-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.55}
-.sound-btn{
-  width:39px;height:39px;border:1px solid var(--line);border-radius:50%;
-  color:inherit;background:transparent;cursor:pointer;display:grid;place-items:center;
-  transition:.3s;
+.logo{
+ font:800 12px Manrope,sans-serif;
+ letter-spacing:.25em;text-transform:uppercase;
 }
-.sound-btn:hover{background:var(--fg);color:var(--bg)}
-.sound-bars{display:flex;gap:3px;align-items:center;height:14px}
-.sound-bars i{display:block;width:2px;height:5px;background:currentColor;border-radius:5px}
-.sound-bars i:nth-child(2){height:12px}.sound-bars i:nth-child(3){height:8px}.sound-bars i:nth-child(4){height:11px}
+.logo span{font-weight:400;opacity:.42}
+.top-info{
+ display:flex;align-items:center;gap:25px;
+ font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--muted);
+}
+.top-info a{color:inherit;text-decoration:none;pointer-events:auto}
+.top-info a:hover{color:var(--white)}
 .hero{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;transition:opacity .8s var(--ease),transform 1s var(--ease);
+ position:absolute;inset:0;z-index:5;
+ display:flex;align-items:center;justify-content:center;
+ text-align:center;
+ transition:opacity 1s var(--ease),transform 1.2s var(--ease);
 }
-.hero.hidden{opacity:0;pointer-events:none;transform:scale(1.04)}
-.hero-copy{position:relative;z-index:3;text-align:center;padding:30px}
-.eyebrow{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-bottom:25px}
-.hero h1{
-  font:800 clamp(65px,14vw,190px)/.83 Manrope,sans-serif;
-  letter-spacing:-.105em;margin:0 0 30px;
+.hero.out{opacity:0;pointer-events:none;transform:scale(1.08)}
+.hero-inner{position:relative;z-index:3;padding:25px}
+.hero-kicker{
+ font-size:9px;letter-spacing:.38em;text-transform:uppercase;
+ color:var(--muted);margin-bottom:30px;
 }
-.hero h1 span{display:block}
-.hero-sub{font:300 clamp(12px,1.4vw,17px) Manrope,sans-serif;letter-spacing:.17em;text-transform:uppercase;opacity:.65}
-.hero-bottom{
-  position:absolute;bottom:6vh;left:0;width:100%;display:flex;justify-content:center;
-  align-items:center;gap:15px;color:var(--muted);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+.hero-title{
+ font:800 clamp(75px,15vw,205px)/.78 Manrope,sans-serif;
+ letter-spacing:-.115em;margin:0;
 }
-.mouse-icon{width:17px;height:25px;border:1px solid currentColor;border-radius:12px;position:relative}
-.mouse-icon:after{content:"";position:absolute;top:5px;left:7px;width:2px;height:5px;background:currentColor;border-radius:3px;animation:wheel 1.5s infinite}
-@keyframes wheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(7px);opacity:0}}
-.enter-btn{
-  margin-top:38px;border:1px solid var(--line);background:transparent;color:inherit;
-  padding:15px 26px;border-radius:50px;text-transform:uppercase;letter-spacing:.17em;
-  font-size:10px;cursor:pointer;transition:.35s;
+.hero-title span{display:block}
+.hero-title span:last-child{
+ font-size:.46em;letter-spacing:.16em;
+ font-weight:400;margin-top:28px;
 }
-.enter-btn:hover{background:var(--fg);color:var(--bg);transform:translateY(-3px)}
-.archive{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s}
+.hero-line{
+ width:50px;height:1px;background:currentColor;
+ opacity:.35;margin:38px auto 22px;
+}
+.hero-description{
+ font:300 clamp(11px,1.2vw,15px) Manrope;
+ letter-spacing:.2em;text-transform:uppercase;opacity:.65;
+}
+.enter{
+ margin-top:42px;border:1px solid var(--line);
+ background:transparent;color:inherit;
+ padding:16px 28px;border-radius:50px;
+ font-size:9px;letter-spacing:.24em;text-transform:uppercase;
+ cursor:pointer;transition:.4s var(--ease);
+}
+.enter:hover{background:var(--white);color:#050505;transform:translateY(-4px)}
+.hero-foot{
+ position:absolute;bottom:6vh;left:0;width:100%;
+ display:flex;align-items:center;justify-content:center;gap:13px;
+ color:var(--muted);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+}
+.scroll-symbol{
+ width:16px;height:25px;border:1px solid currentColor;
+ border-radius:12px;position:relative;
+}
+.scroll-symbol:after{
+ content:"";position:absolute;left:6px;top:5px;width:2px;height:5px;
+ border-radius:4px;background:currentColor;
+ animation:scrollDot 1.5s infinite;
+}
+@keyframes scrollDot{
+ 0%{transform:translateY(0);opacity:1}
+ 100%{transform:translateY(8px);opacity:0}
+}
+.archive{
+ position:absolute;inset:0;z-index:3;
+ opacity:0;pointer-events:none;
+ transition:opacity .9s var(--ease);
+}
 .archive.active{opacity:1;pointer-events:auto}
-.track{
-  position:absolute;inset:0;display:flex;align-items:center;
-  width:max-content;height:100%;will-change:transform;
-  transition:transform .08s linear;
+.year-stage{
+ position:absolute;inset:0;overflow:hidden;
 }
-.chapter{
-  position:relative;width:100vw;height:100vh;flex:none;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
-  padding:100px 8vw 90px;
+.year-content{
+ position:absolute;inset:0;
+ opacity:0;pointer-events:none;
+ transition:opacity .75s var(--ease),transform 1s var(--ease);
+ transform:translateY(18px);
 }
-.chapter:before{
-  content:"";position:absolute;width:65vw;height:65vw;max-width:800px;max-height:800px;
-  border-radius:50%;border:1px solid var(--line);opacity:.2;
-  transform:scale(.8);transition:transform 1.8s var(--ease),opacity 1.8s;
+.year-content.active{
+ opacity:1;pointer-events:auto;transform:translateY(0);
 }
-.chapter.active:before{transform:scale(1);opacity:.42}
-.chapter-content{position:relative;z-index:3;width:min(1050px,100%);display:grid;grid-template-columns:1fr 1fr;gap:7vw;align-items:center}
-.chapter-left{position:relative}
-.chapter-year{
-  font:800 clamp(75px,12vw,165px)/.85 Manrope,sans-serif;letter-spacing:-.1em;
-  margin:0 0 22px;
+.year-top{
+ position:absolute;left:7vw;top:14vh;z-index:8;
+ max-width:440px;pointer-events:none;
 }
-.chapter-tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
-.chapter-title{font:500 clamp(24px,3.3vw,46px)/1.13 Manrope,sans-serif;letter-spacing:-.055em;margin:20px 0}
-.chapter-description{font-size:14px;line-height:1.9;color:var(--muted);max-width:430px}
-.chapter-right{display:flex;flex-direction:column;gap:10px}
-.event-card{
-  border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(22px);
-  border-radius:15px;padding:20px 22px;cursor:pointer;text-align:left;color:inherit;
-  transition:transform .45s var(--ease),background .4s,border-color .4s;
-  display:grid;grid-template-columns:42px 1fr 20px;align-items:center;gap:14px;
+.year-index{
+ font-size:9px;letter-spacing:.35em;text-transform:uppercase;
+ color:var(--muted);margin-bottom:16px;
 }
-.event-card:hover{transform:translateX(8px);background:rgba(128,128,128,.13);border-color:rgba(128,128,128,.5)}
-.event-number{font:500 11px Manrope;color:var(--muted)}
-.event-name{font:600 14px Manrope;letter-spacing:-.02em}
-.event-type{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:5px}
-.event-arrow{font-size:18px;opacity:.55}
-.chapter-index{position:absolute;bottom:35px;left:8vw;font-size:10px;letter-spacing:.2em;color:var(--muted)}
-.chapter-side{position:absolute;right:4vw;bottom:35px;font-size:10px;letter-spacing:.2em;color:var(--muted)}
-.progress{
-  position:fixed;z-index:20;bottom:0;left:0;width:100%;height:2px;background:var(--line);
+.year-number{
+ font:800 clamp(70px,11vw,145px)/.83 Manrope,sans-serif;
+ letter-spacing:-.105em;margin:0;
 }
-.progress span{display:block;width:0;height:100%;background:currentColor;transition:width .12s linear}
+.year-heading{
+ font:500 clamp(18px,2.3vw,31px)/1.15 Manrope;
+ letter-spacing:-.045em;margin:19px 0 10px;
+}
+.year-description{
+ max-width:390px;color:var(--muted);
+ font-size:12px;line-height:1.8;
+}
+.chain-caption{
+ position:absolute;left:50%;top:50%;
+ transform:translate(-50%,-50%);
+ font:500 9px Manrope;letter-spacing:.24em;
+ text-transform:uppercase;white-space:nowrap;
+ opacity:.3;pointer-events:none;
+}
+.chain-guide{
+ position:absolute;left:0;right:0;top:50%;
+ height:1px;background:var(--line);opacity:.2;
+}
+.event-layer{
+ position:absolute;inset:0;z-index:10;
+ pointer-events:none;
+}
+.event-pin{
+ position:absolute;left:0;top:0;
+ transform:translate(-50%,-50%);
+ pointer-events:auto;
+ border:0;background:transparent;color:inherit;
+ cursor:pointer;padding:0;
+ width:1px;height:1px;
+}
+.pin-core{
+ position:absolute;left:0;top:0;
+ width:13px;height:13px;border-radius:50%;
+ transform:translate(-50%,-50%);
+ border:1px solid currentColor;
+ background:var(--white);
+ box-shadow:0 0 18px rgba(255,255,255,.5);
+ transition:transform .35s var(--ease),box-shadow .35s;
+}
+body.light .pin-core{background:#111;box-shadow:0 0 18px rgba(0,0,0,.3)}
+.pin-ring{
+ position:absolute;left:0;top:0;width:29px;height:29px;
+ border:1px solid currentColor;border-radius:50%;
+ opacity:.4;transform:translate(-50%,-50%);
+ transition:transform .5s var(--ease),opacity .5s;
+}
+.event-pin:hover .pin-ring{transform:translate(-50%,-50%) scale(1.55);opacity:.9}
+.event-pin:hover .pin-core{transform:translate(-50%,-50%) scale(1.5)}
+.pin-label{
+ position:absolute;left:0;
+ width:max-content;max-width:210px;
+ transform:translateX(-50%);
+ text-align:center;
+ padding:0 8px;
+ pointer-events:none;
+}
+.event-pin.up .pin-label{bottom:23px}
+.event-pin.down .pin-label{top:23px}
+.pin-title{
+ display:block;font:600 11px Manrope;
+ letter-spacing:-.015em;
+ text-shadow:0 2px 15px rgba(0,0,0,.4);
+}
+.pin-type{
+ display:block;margin-top:5px;
+ font-size:8px;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--muted);
+}
+.event-pin:hover .pin-title{letter-spacing:.02em}
+.year-bottom{
+ position:absolute;left:7vw;bottom:8vh;z-index:12;
+ display:flex;align-items:center;gap:16px;
+ font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--muted);pointer-events:none;
+}
+.bottom-line{width:35px;height:1px;background:currentColor}
+.event-count{
+ position:absolute;right:7vw;bottom:8vh;z-index:12;
+ font:500 10px Manrope;letter-spacing:.15em;color:var(--muted);
+}
 .navigation{
-  position:fixed;z-index:20;bottom:5vh;right:4.5vw;display:flex;align-items:center;gap:9px;
+ position:fixed;z-index:30;right:4.5vw;bottom:5vh;
+ display:flex;align-items:center;gap:9px;
 }
-.nav-btn{
-  width:43px;height:43px;border:1px solid var(--line);border-radius:50%;
-  background:transparent;color:inherit;cursor:pointer;font-size:17px;transition:.3s;
+.nav-button{
+ width:43px;height:43px;border:1px solid var(--line);
+ border-radius:50%;background:transparent;color:inherit;
+ cursor:pointer;font-size:17px;transition:.35s;
 }
-.nav-btn:hover{background:var(--fg);color:var(--bg)}
-.nav-count{font:500 10px Manrope;letter-spacing:.13em;margin:0 10px;color:var(--muted)}
-.year-menu{
-  position:fixed;z-index:20;left:4.5vw;bottom:5vh;display:flex;gap:8px;
-  max-width:45vw;overflow:hidden;
+.nav-button:hover{background:var(--white);color:#050505}
+.nav-number{
+ min-width:75px;text-align:center;
+ font:500 10px Manrope;letter-spacing:.15em;color:var(--muted);
 }
-.year-dot{
-  flex:none;border:0;background:transparent;color:var(--muted);cursor:pointer;
-  font:500 10px Manrope;padding:8px 3px;opacity:.55;transition:.3s;
+.year-selector{
+ position:fixed;z-index:30;left:4.5vw;bottom:5vh;
+ display:flex;align-items:center;gap:9px;
+ max-width:48vw;overflow-x:auto;scrollbar-width:none;
 }
-.year-dot.active{opacity:1;color:inherit}
-.year-dot:after{content:"";display:block;height:1px;background:currentColor;transform:scaleX(0);transition:.3s;margin-top:5px}
-.year-dot.active:after{transform:scaleX(1)}
+.year-selector::-webkit-scrollbar{display:none}
+.year-select{
+ flex:none;border:0;background:transparent;color:var(--muted);
+ font:500 10px Manrope;padding:8px 2px;cursor:pointer;
+ opacity:.55;transition:.3s;
+}
+.year-select.active{opacity:1;color:inherit}
+.year-select:after{
+ content:"";display:block;height:1px;background:currentColor;
+ margin-top:6px;transform:scaleX(0);transition:.3s;
+}
+.year-select.active:after{transform:scaleX(1)}
+.progress{
+ position:fixed;z-index:31;bottom:0;left:0;width:100%;
+ height:2px;background:var(--line);
+}
+.progress span{
+ display:block;width:0;height:100%;
+ background:currentColor;transition:width .15s linear;
+}
+.scroll-hint{
+ position:fixed;z-index:30;right:22px;top:50%;
+ writing-mode:vertical-rl;transform:translateY(-50%);
+ color:var(--muted);font-size:8px;letter-spacing:.22em;
+ text-transform:uppercase;opacity:.7;pointer-events:none;
+}
 .detail-overlay{
-  position:fixed;z-index:50;inset:0;background:rgba(0,0,0,.52);
-  backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;
-  padding:22px;opacity:0;pointer-events:none;transition:opacity .45s;
+ position:fixed;z-index:60;inset:0;
+ display:flex;align-items:center;justify-content:center;
+ padding:20px;background:rgba(0,0,0,.56);
+ backdrop-filter:blur(22px);
+ opacity:0;pointer-events:none;transition:opacity .5s;
 }
 .detail-overlay.open{opacity:1;pointer-events:auto}
-.detail{
-  width:min(650px,100%);max-height:85vh;overflow:auto;
-  border:1px solid rgba(255,255,255,.2);border-radius:22px;
-  background:#101010;color:#fff;padding:clamp(25px,5vw,55px);
-  transform:translateY(25px) scale(.98);transition:transform .55s var(--ease);
-  box-shadow:0 30px 100px rgba(0,0,0,.4);
+.detail-panel{
+ width:min(760px,100%);max-height:88vh;overflow-y:auto;
+ background:#0c0c0d;color:#f7f7f7;
+ border:1px solid rgba(255,255,255,.16);
+ border-radius:22px;padding:clamp(25px,5vw,58px);
+ transform:translateY(25px) scale(.985);
+ transition:transform .6s var(--ease);
+ box-shadow:0 35px 120px rgba(0,0,0,.5);
 }
-.detail-overlay.open .detail{transform:translateY(0) scale(1)}
+.detail-overlay.open .detail-panel{transform:translateY(0) scale(1)}
+.detail-top{display:flex;justify-content:space-between;align-items:center}
+.detail-label{
+ font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#888;
+}
 .detail-close{
-  float:right;border:1px solid rgba(255,255,255,.2);width:38px;height:38px;
-  border-radius:50%;background:transparent;color:white;cursor:pointer;font-size:18px;
+ width:38px;height:38px;border:1px solid #333;border-radius:50%;
+ background:transparent;color:#fff;font-size:20px;cursor:pointer;
 }
-.detail-year{font-size:10px;letter-spacing:.25em;color:#999;text-transform:uppercase;margin:25px 0 15px}
-.detail h2{font:700 clamp(32px,7vw,57px)/1 Manrope;letter-spacing:-.07em;margin:0 0 22px}
-.detail p{font-size:14px;line-height:1.9;color:#aaa}
-.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}
-.detail-meta span{font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #333;padding:9px 12px;border-radius:30px;color:#bbb}
-.detail-link{display:inline-block;margin-top:25px;color:#fff;text-decoration:none;border-bottom:1px solid #777;padding-bottom:6px;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-.archive-end{
-  width:100vw;height:100vh;flex:none;display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:30px;
+.detail-year{
+ margin-top:35px;font:500 10px Manrope;letter-spacing:.2em;color:#999;
 }
-.archive-end h2{font:800 clamp(55px,12vw,145px)/.9 Manrope;letter-spacing:-.09em;margin:0}
-.archive-end p{font-size:11px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;margin-top:25px}
-.hint{
-  position:fixed;z-index:20;top:50%;right:23px;writing-mode:vertical-rl;
-  font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
-  transform:translateY(-50%);opacity:.65;
+.detail-title{
+ font:800 clamp(32px,7vw,68px)/.98 Manrope;
+ letter-spacing:-.075em;margin:14px 0 25px;
+}
+.detail-description{
+ color:#aaa;font-size:14px;line-height:1.9;max-width:590px;
+}
+.detail-cover{
+ width:100%;aspect-ratio:16/7;margin:28px 0;
+ border:1px solid #303030;border-radius:12px;overflow:hidden;
+ display:flex;align-items:center;justify-content:center;
+ background:
+ radial-gradient(circle at 70% 30%,rgba(255,255,255,.17),transparent 30%),
+ linear-gradient(130deg,#080808,#222,#080808);
+}
+.detail-cover span{
+ font:800 clamp(24px,7vw,65px) Manrope;
+ letter-spacing:-.08em;text-align:center;
+}
+.detail-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}
+.detail-tag{
+ border:1px solid #303030;border-radius:30px;
+ padding:9px 12px;font-size:9px;letter-spacing:.12em;
+ text-transform:uppercase;color:#aaa;
+}
+.detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.detail-action{
+ color:white;text-decoration:none;
+ border-bottom:1px solid #555;padding:8px 0;
+ font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+}
+.detail-action:hover{border-color:white}
+.detail-note{font-size:10px;color:#777;line-height:1.7;margin-top:25px}
+.end-screen{
+ position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;text-align:center;
+ opacity:0;pointer-events:none;transition:opacity .7s;
+}
+.end-screen.active{opacity:1;pointer-events:auto}
+.end-title{
+ font:800 clamp(55px,12vw,150px)/.86 Manrope;
+ letter-spacing:-.1em;margin:0;
+}
+.end-sub{
+ font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+ color:var(--muted);margin-top:30px;
 }
 @media(max-width:700px){
- .topbar{padding:20px 6vw}.top-label{display:none}
- .hero h1{font-size:clamp(70px,20vw,130px)}
- .chapter{padding:95px 7vw 100px;align-items:flex-start}
- .chapter-content{grid-template-columns:1fr;gap:22px;align-content:center;height:100%}
- .chapter-year{font-size:clamp(75px,20vw,120px);margin-bottom:12px}
- .chapter-title{font-size:27px;margin:12px 0}
- .chapter-description{font-size:12px;line-height:1.7}
- .chapter-right{gap:7px}
- .event-card{padding:13px 14px;grid-template-columns:30px 1fr 15px;border-radius:12px}
- .event-name{font-size:12px}.event-type{font-size:8px}
- .chapter-index{left:7vw;bottom:23px}.chapter-side{right:7vw;bottom:23px}
- .navigation{right:6vw;bottom:4vh}
- .nav-btn{width:38px;height:38px}
- .year-menu{left:6vw;bottom:4vh;max-width:48vw;gap:5px}
- .year-dot{font-size:9px}
- .hint{display:none}
- .chapter:before{width:100vw;height:100vw}
+ .topbar{padding:20px 6vw}
+ .top-info{display:none}
+ .hero-title{font-size:clamp(80px,21vw,145px)}
+ .year-top{left:7vw;top:12vh;max-width:86vw}
+ .year-number{font-size:clamp(76px,19vw,125px)}
+ .year-heading{font-size:22px;margin:12px 0 7px}
+ .year-description{font-size:11px;max-width:310px}
+ .pin-label{max-width:125px}
+ .pin-title{font-size:9px}
+ .pin-type{font-size:7px}
+ .year-bottom{left:7vw;bottom:12vh;font-size:8px}
+ .event-count{right:7vw;bottom:12vh}
+ .navigation{right:6vw;bottom:4vh;gap:5px}
+ .nav-button{width:37px;height:37px}
+ .nav-number{min-width:52px;font-size:9px}
+ .year-selector{left:6vw;bottom:4vh;max-width:43vw;gap:7px}
+ .year-select{font-size:9px}
+ .scroll-hint{display:none}
+ .detail-panel{border-radius:17px}
+ .detail-description{font-size:12px}
 }
-@media(max-height:680px) and (min-width:701px){
- .chapter-content{gap:4vw}.chapter-year{font-size:100px}
- .event-card{padding:13px 17px}
- .chapter-description{font-size:12px}
+@media(max-height:650px) and (min-width:701px){
+ .year-top{top:10vh}
+ .year-number{font-size:90px}
+ .year-heading{font-size:22px}
+ .year-description{font-size:11px}
 }
 </style>
 </head>
 <body>
-<canvas id="webgl"></canvas>
-<div class="grain"></div>
+<canvas id="scene"></canvas>
+<div id="grain"></div>
+
 <div id="app">
 <header class="topbar">
-  <div class="brand">PTK <span> / THE CHAIN ARCHIVE</span></div>
-  <div class="top-right">
-    <div class="top-label">An independent fan archive</div>
-    <button class="sound-btn" id="soundBtn" aria-label="Zvuk"><span class="sound-bars"><i></i><i></i><i></i><i></i></span></button>
-  </div>
+ <div class="logo">PTK <span> / THE CHAIN ARCHIVE</span></div>
+ <div class="top-info">
+  <span>Independent digital archive</span>
+  <span>2013 — 2026</span>
+ </div>
 </header>
 
 <section class="hero" id="hero">
-  <div class="hero-copy">
-    <div class="eyebrow">A journey through the years</div>
-    <h1><span>PTK</span><span>ARCHIVE</span></h1>
-    <div class="hero-sub">From the underground to everywhere.</div>
-    <button class="enter-btn" id="enter">Enter the archive&nbsp; ↗</button>
-  </div>
-  <div class="hero-bottom"><span class="mouse-icon"></span> Scroll to explore</div>
+ <div class="hero-inner">
+  <div class="hero-kicker">A visual history of PTK</div>
+  <h1 class="hero-title"><span>PTK</span><span>THE CHAIN</span></h1>
+  <div class="hero-line"></div>
+  <div class="hero-description">Every link has a story.</div>
+  <button class="enter" id="enter">Explore the archive&nbsp; ↗</button>
+ </div>
+ <div class="hero-foot">
+  <span class="scroll-symbol"></span>
+  <span>Scroll to travel through time</span>
+ </div>
 </section>
 
 <main class="archive" id="archive">
-  <div class="track" id="track"></div>
+ <div class="year-stage" id="yearStage"></div>
+ <div class="end-screen" id="endScreen">
+  <div>
+   <div class="hero-kicker">The chain continues</div>
+   <h2 class="end-title">NOT THE<br>END.</h2>
+   <div class="end-sub">PTK — The Chain Archive</div>
+  </div>
+ </div>
 </main>
 
-<div class="hint">Scroll horizontally to explore</div>
-<div class="year-menu" id="yearMenu"></div>
+<div class="scroll-hint">Scroll / Swipe to travel through time</div>
+<div class="year-selector" id="yearSelector"></div>
 <div class="navigation">
-  <span class="nav-count" id="navCount">01 / 15</span>
-  <button class="nav-btn" id="prev" aria-label="Předchozí">←</button>
-  <button class="nav-btn" id="next" aria-label="Další">→</button>
+ <button class="nav-button" id="previous" aria-label="Previous year">←</button>
+ <span class="nav-number" id="navNumber">2013 / 2026</span>
+ <button class="nav-button" id="next" aria-label="Next year">→</button>
 </div>
-<div class="progress"><span id="progress"></span></div>
+<div class="progress"><span id="progressBar"></span></div>
 
 <div class="detail-overlay" id="detailOverlay">
-  <article class="detail">
-    <button class="detail-close" id="detailClose" aria-label="Zavřít">×</button>
-    <div class="detail-year" id="detailYear"></div>
-    <h2 id="detailTitle"></h2>
-    <p id="detailText"></p>
-    <div class="detail-meta" id="detailMeta"></div>
-    <a class="detail-link" id="detailLink" href="#" target="_blank" rel="noopener" hidden>Explore source ↗</a>
-  </article>
+ <article class="detail-panel">
+  <div class="detail-top">
+   <div class="detail-label">PTK / ARCHIVE ENTRY</div>
+   <button class="detail-close" id="detailClose" aria-label="Close">×</button>
+  </div>
+  <div class="detail-year" id="detailYear"></div>
+  <h2 class="detail-title" id="detailTitle"></h2>
+  <p class="detail-description" id="detailDescription"></p>
+  <div class="detail-cover" id="detailCover"><span>PTK</span></div>
+  <div class="detail-tags" id="detailTags"></div>
+  <div class="detail-actions" id="detailActions"></div>
+  <div class="detail-note" id="detailNote"></div>
+ </article>
 </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 <script>
-/* ==========================================================
+/* =========================================================
    PTK — THE CHAIN ARCHIVE
-   One-file interactive timeline experience.
-   ========================================================== */
+   The chain is the timeline. Every event is connected to it.
+   ========================================================= */
 
-const chapters = [
+/* ---------------------------------------------------------
+   ARCHIVE DATA
+   --------------------------------------------------------- */
+
+const archiveData = [
 {
- year:"2013",tag:"THE BEGINNING",title:"Before the name became known.",
- description:"První doložená etapa. SoundCloud, první nahrávky a hledání vlastního zvuku. Ještě před velkými projekty a milionovými čísly.",
+ year:2013,
+ chapter:"THE FIRST LINK",
+ title:"Before everything.",
+ subtitle:"The first uploads. The first bars.",
+ description:"Ještě před velkými alby, koncerty a milionovými čísly. Raná internetová éra, SoundCloud, první nahrávky a mixtape YoungMotherFucker.",
  events:[
-  {name:"SoundCloud beginnings",type:"EARLY UNDERGROUND",text:"PTK se dostává do hudebního prostoru přes rané internetové releasy. Právě SoundCloud je spojovaný s jeho první mixtapovou érou. Přesné datum úplně prvního uploadu zatím není spolehlivě potvrzené.",meta:["SoundCloud","Underground","Early era"]},
-  {name:"$lowed Down",type:"FIRST OFFICIAL VIDEO",text:"V únoru 2013 vychází první oficiální videoklip PTK s názvem $lowed Down. Je to jeden z nejstarších veřejně doložených milníků jeho hudební cesty.",meta:["February 2013","Music video"]},
-  {name:"YoungMotherFucker",type:"DEBUT MIXTAPE",text:"V říjnu 2013 vychází debutový mixtape YoungMotherFucker. Raná tvorba z období, kdy se PTK teprve formoval jako interpret.",meta:["October 2013","Mixtape","SoundCloud era"]}
+  {
+   title:"First SoundCloud era",
+   type:"SOUNDCLOUD / BEGINNINGS",
+   description:"Začátky PTK jsou spojované s internetovou undergroundovou scénou a ranými uploady. SoundCloud byl důležitým místem, kde se jeho první tvorba šířila. Úplně první upload a jeho přesné datum nejsou spolehlivě doložené, proto je tato položka vedena jako začátek období, nikoli jako konkrétní den.",
+   tags:["SoundCloud","Underground","Early recordings"],
+   link:"https://soundcloud.com/search?q=PTK%20YoungMotherFucker",
+   linkLabel:"Find early SoundCloud releases",
+   cover:"SOUNDCLOUD",
+   note:"Počátek období 2013–2014. Nezaměňovat s přesným datem prvního uploadu."
+  },
+  {
+   title:"YoungMotherFucker",
+   type:"DEBUT MIXTAPE",
+   description:"Raná mixtape éra PTK. YoungMotherFucker patří k nejstarším veřejně evidovaným projektům a zachycuje jeho tvorbu ještě před pozdějším růstem na české scéně.",
+   tags:["2013","Mixtape","Early PTK"],
+   link:"https://www.youtube.com/results?search_query=PTK+YoungMotherFucker",
+   linkLabel:"Search the mixtape",
+   cover:"YoungMotherFucker",
+   note:"Projekt je v diskografických katalozích uváděn jako mixtape z roku 2013."
+  },
+  {
+   title:"Stay High",
+   type:"EARLY YOUTUBE ARCHIVE",
+   description:"Kanál Stay High uchovává některé z nejstarších stop PTK z let 2013–2014. Právě zde se dají dohledat jeho první vzácná videa a raná podoba jeho tvorby.",
+   tags:["Stay High","2013–2014","Rare videos"],
+   link:"https://www.youtube.com/results?search_query=PTK+Stay+High+2013",
+   linkLabel:"Search old Stay High videos",
+   cover:"STAY HIGH",
+   note:"Rapzzz popisuje tento kanál jako místo, kde jsou zachované PTK počátky."
+  },
+  {
+   title:"$lowed Down",
+   type:"EARLY VIDEO",
+   description:"Jedna z nejstarších skladeb a videí spojovaných s ranou etapou PTK. V archivu patří do první kapitoly jeho hudební cesty.",
+   tags:["Early video","2013","Archive"],
+   link:"https://www.youtube.com/results?search_query=PTK+%24lowed+Down",
+   linkLabel:"Search the original video",
+   cover:"$LOWED DOWN",
+   note:"Přesné datum zveřejnění je třeba ověřit podle původního uploadu."
+  }
  ]
 },
 {
- year:"2014",tag:"UNDERGROUND YEARS",title:"Building a sound.",
- description:"Období rané tvorby. Starší materiály, internetová rapová scéna a hledání směru, který se později stane poznávacím znamením PTK.",
+ year:2014,
+ chapter:"THE DEEP UNDERGROUND",
+ title:"Almost nobody knew.",
+ subtitle:"Rare videos. Early connections.",
+ description:"Období, kdy se PTK pohyboval hluboko v undergroundu. Staré uploady, první kontakty a materiály, které dnes zná jen část posluchačů.",
  events:[
-  {name:"Early uploads & demos",type:"ARCHIVE",text:"Rané nahrávky a internetové releasy z tohoto období patří do historie PTK. U části starých uploadů se nedochovala jednoznačná data ani původní odkazy, proto je archiv řadí pouze do širšího období.",meta:["Early recordings","Archive"]},
-  {name:"Stay High era",type:"YOUTUBE / VIDEO",text:"S raným obdobím PTK jsou spojované také starší uploady a videa na kanálu Stay High. Jde o stopu jeho prvních let na české undergroundové scéně.",meta:["Stay High","Early videos"]},
-  {name:"Finding the identity",type:"THE EARLY SOUND",text:"Postupné budování vlastního stylu, spolupráce a kontaktů v undergroundové scéně. Ne všechna původní videa a nahrávky jsou dnes snadno dohledatelné.",meta:["Underground","Early career"]}
+  {
+   title:"The rare Stay High videos",
+   type:"RARE FOOTAGE",
+   description:"Vzácná videa z období 2013–2014 ukazují úplně jinou etapu PTK. Starší vizuály a první nahrávky zachycují jeho tehdejší styl ještě před výraznou proměnou hlasu a soundu.",
+   tags:["2013–2014","Stay High","Archive"],
+   link:"https://www.youtube.com/results?search_query=PTK+Stay+High",
+   linkLabel:"Explore the old videos",
+   cover:"RARE FOOTAGE"
+  },
+  {
+   title:"Boyler / Icy L connection",
+   type:"EARLY CONNECTION",
+   description:"V raném období se PTK znal s Boylerem, později známým jako Icy L. Jde o zajímavou osobní a scénickou stopu z jeho úplných začátků; podle dobového profilu z tohoto přátelství nevzniklo společné kolabo.",
+   tags:["Boyler","Icy L","Early era"],
+   link:"https://www.youtube.com/results?search_query=PTK+Icy+L+Boyler",
+   linkLabel:"Search archive material",
+   cover:"EARLY CONNECTION"
+  },
+  {
+   title:"The first bars",
+   type:"UNDERGROUND",
+   description:"PTK se postupně pohybuje v menším okruhu posluchačů a jeho první bars se šíří mimo hlavní proud. Tato část příběhu je důležitá právě proto, že předchází jeho pozdějšímu úspěchu.",
+   tags:["Underground","Early recordings"],
+   link:"https://www.youtube.com/results?search_query=PTK+2014+old+tracks",
+   linkLabel:"Search early recordings",
+   cover:"THE FIRST BARS"
+  }
  ]
 },
 {
- year:"2015",tag:"ICED OUT",title:"A new chapter begins.",
- description:"Další krok od prvních nahrávek. Vydávání nových věcí, budování jména a první jasnější obrysy vlastní identity.",
+ year:2015,
+ chapter:"ICED OUT",
+ title:"A new identity.",
+ subtitle:"The name starts to take shape.",
+ description:"Nová etapa, kanál ICEDOUT PTK a skladba Do konce zásob. Postupný vývoj flow, hlasu a celkového soundu.",
  events:[
-  {name:"Do konce zásob",type:"RELEASE",text:"Do konce zásob patří mezi rané releasy spojované s obdobím roku 2015. Důležitá část katalogu před pozdějším průlomem.",meta:["2015","Release"]},
-  {name:"ICEDOUT PTK",type:"YOUTUBE CHANNEL",text:"V lednu 2015 se objevuje kanál ICEDOUT PTK, který se stává jednou z důležitých stop rané videografické éry.",meta:["January 2015","YouTube"]},
-  {name:"Underground catalog",type:"MUSIC ARCHIVE",text:"Rané singly a nahrávky z této éry pomáhají mapovat vývoj PTK před obdobím, kdy se jeho jméno dostane k širšímu publiku.",meta:["Early catalog","Underground"]}
+  {
+   title:"ICEDOUT PTK",
+   type:"YOUTUBE CHANNEL",
+   description:"Od ledna 2015 PTK vydává na kanálu iced out PTK. Jde o důležitý přechod od starších materiálů k nové etapě, která začíná mít jasnější identitu.",
+   tags:["January 2015","YouTube","Iced Out"],
+   link:"https://www.youtube.com/results?search_query=ICEDOUT+PTK",
+   linkLabel:"Explore the channel",
+   cover:"ICEDOUT PTK"
+  },
+  {
+   title:"Do konce zásob",
+   type:"EARLY RELEASE",
+   description:"Do konce zásob je jedním z důležitých raných releasů nové éry. Dobový profil popisuje výrazný posun ve flow, hlasu a celkovém sound engineeringu.",
+   tags:["2015","Early release","Iced Out"],
+   link:"https://www.youtube.com/watch?v=EElQ3nIkVYo",
+   linkLabel:"Watch Do konce zásob",
+   cover:"DO KONCE ZÁSOB",
+   video:"EElQ3nIkVYo"
+  },
+  {
+   title:"The Iced Out identity",
+   type:"IDENTITY / MERCH",
+   description:"Iced Out se postupně stává důležitou součástí PTK identity. Kolem jména se buduje vlastní vizuální styl a později také merch.",
+   tags:["Iced Out","Identity","Merch"],
+   link:"https://www.youtube.com/results?search_query=PTK+Iced+Out+merch",
+   linkLabel:"Search archive material",
+   cover:"ICED OUT"
+  }
  ]
 },
 {
- year:"2016",tag:"THE GRIND",title:"Still underground. Still moving.",
- description:"Rok mezi prvními releasy a výraznějším růstem. Spolupráce, další nahrávky a postupné budování publika.",
+ year:2016,
+ chapter:"THE GRIND",
+ title:"The first attention.",
+ subtitle:"One track after another.",
+ description:"Starší feat s Protivou, postupné šíření hudby a první větší pozornost posluchačů. Stále bez velkých produkcí a drahých videoklipů.",
  events:[
-  {name:"Collaborations with Protiva",type:"COLLABORATIONS",text:"V rané tvorbě PTK se objevují spolupráce a propojení s dalšími jmény české undergroundové scény, včetně Protivy. Konkrétní chronologii jednotlivých nahrávek je potřeba ověřovat podle původních uploadů.",meta:["Protiva","Underground"]},
-  {name:"The early Iced Out identity",type:"IDENTITY",text:"Název Iced Out se postupně stává součástí vizuální a hudební identity kolem PTK. Nejde jen o jednotlivé tracky, ale o budování rozpoznatelného jména.",meta:["Iced Out","Identity"]},
-  {name:"Before the breakthrough",type:"CAREER",text:"Éra, která předchází výraznějšímu růstu. Starší skladby, videa a spolupráce jsou důležitým kontextem pro pozdější Nevezmu tě z klubu domů.",meta:["Pre-breakthrough","Archive"]}
+  {
+   title:"PTK feat. Protiva",
+   type:"COLLABORATIONS",
+   description:"Spolupráce s Protivou patří mezi důležité rané momenty. Původní videa byla podle dobového profilu z YouTube odstraněna a dnes se dají dohledat hlavně jako reuploady na neoficiálních kanálech.",
+   tags:["Protiva","Collaboration","Reuploads"],
+   link:"https://www.youtube.com/watch?v=VaMNXU5zPXA",
+   linkLabel:"Find the first collaboration",
+   cover:"PTK × PROTIVA",
+   video:"VaMNXU5zPXA"
+  },
+  {
+   title:"Second Protiva collaboration",
+   type:"COLLABORATION",
+   description:"Další spolupráce s Protivou z rané etapy. Patří mezi důležité stopy období, kdy si PTK začali všímat další posluchači.",
+   tags:["Protiva","Early collaboration"],
+   link:"https://www.youtube.com/watch?v=mSjuk726eYc",
+   linkLabel:"Find the second collaboration",
+   cover:"PTK × PROTIVA II",
+   video:"mSjuk726eYc"
+  },
+  {
+   title:"The underground starts spreading",
+   type:"CAREER MILESTONE",
+   description:"Hudba PTK se šíří především díky samotným trackům a posluchačům. Dobový profil zdůrazňuje, že nepotřeboval drahé klipy, sponzory ani masivní promo, aby se o něm začalo mluvit.",
+   tags:["Underground","The Mag","Early growth"],
+   link:"https://www.youtube.com/results?search_query=PTK+2016+old+tracks",
+   linkLabel:"Search the 2016 archive",
+   cover:"THE GRIND"
+  }
  ]
 },
 {
- year:"2017",tag:"THE FIRST WAVE",title:"The underground starts to move.",
- description:"Období, kdy se PTK začíná výrazněji dostávat k publiku. Nevezmu tě z klubu domů se stává jednou z důležitých kapitol jeho kariéry.",
+ year:2017,
+ chapter:"THE FIRST WAVE",
+ title:"The club trilogy begins.",
+ subtitle:"The first major breakthrough.",
+ description:"Začíná období, které PTK dostane k širšímu publiku. Série Nevezmu tě z klubu domů a spolupráce Alkohol & Drogy.",
  events:[
-  {name:"Nevezmu tě z klubu domů",type:"BREAKTHROUGH ERA",text:"Začíná éra série Nevezmu tě z klubu domů. Právě tato série videí později výrazně pomůže dostat PTK mezi širší publikum.",meta:["2017–2018","Music video series"]},
-  {name:"Alkohol & Drogy",type:"COLLABORATION",text:"Track Alkohol & Drogy s Protivou patří mezi skladby spojované s ranější výraznou etapou PTK.",meta:["PTK","Protiva"]},
-  {name:"Od Chebu po Ostravu",type:"TOUR",text:"Období prvních koncertních aktivit a společného tour Od Chebu po Ostravu, spojovaného se jmény Schyzo, Darewin a Psycho Rhyme.",meta:["Live","Schyzo","Darewin","Psycho Rhyme"]},
-  {name:"Iced Out merch",type:"MERCH / BRAND",text:"Kolem jména Iced Out se rozvíjí také vlastní merch a vizuální identita. Hudba se začíná spojovat s komunitou a rozpoznatelným stylem.",meta:["Iced Out","Merch"]}
+  {
+   title:"Nevezmu tě z klubu domů",
+   type:"MUSIC VIDEO / SINGLE",
+   description:"První část série, která se později stane jedním z nejvýraznějších momentů PTK kariéry. Neobvyklý podklad a výrazný refrén pomáhají tracku šířit se mezi posluchači.",
+   tags:["2017","Music video","Trilogy"],
+   link:"https://www.youtube.com/watch?v=zNY_eFSZ14M",
+   linkLabel:"Watch the first video",
+   cover:"NEVEZMU TĚ Z KLUBU DOMŮ",
+   video:"zNY_eFSZ14M"
+  },
+  {
+   title:"Nevezmu tě z klubu domů 2",
+   type:"MUSIC VIDEO / SINGLE",
+   description:"Druhá část série navazuje na úspěch prvního videa. Postupně se z ní stává jedna z nejznámějších částí PTK rané videografie.",
+   tags:["2017","Music video","Trilogy"],
+   link:"https://www.youtube.com/watch?v=b0ayMdvBdVA",
+   linkLabel:"Watch the second video",
+   cover:"NEVEZMU TĚ Z KLUBU DOMŮ 2",
+   video:"b0ayMdvBdVA"
+  },
+  {
+   title:"Alkohol & Drogy",
+   type:"COLLABORATION / VIDEO",
+   description:"Spolupráce s Protivou, kterou PTK zakončil rok 2017. Dobový profil ji označuje za první profesionální videoklip PTK.",
+   tags:["Protiva","2017","Official video"],
+   link:"https://www.youtube.com/results?search_query=PTK+Protiva+Alkohol+%26+Drogy",
+   linkLabel:"Find the official video",
+   cover:"ALKOHOL & DROGY"
+  },
+  {
+   title:"Iced Out merch",
+   type:"MERCH / BRAND",
+   description:"Kolem PTK a Iced Out se rozvíjí také vlastní merch a vizuální identita. Hudba se začíná spojovat s komunitou a rozpoznatelným stylem.",
+   tags:["Iced Out","Merch","Brand"],
+   link:"https://www.youtube.com/results?search_query=PTK+Iced+Out+merch",
+   linkLabel:"Search the merch archive",
+   cover:"ICED OUT MERCH"
+  }
  ]
 },
 {
- year:"2018",tag:"THE MOVEMENT",title:"A name people remember.",
- description:"Pokračování série Nevezmu tě z klubu domů a další výrazná etapa vydávání. PTK si buduje stále silnější pozici.",
+ year:2018,
+ chapter:"THE MOVEMENT",
+ title:"From Cheb to Ostrava.",
+ subtitle:"The movement gets bigger.",
+ description:"První tour, třetí část klubové trilogie a mimořádně produktivní období. Rok, kdy se z lokálního jména stává stále výraznější interpret.",
  events:[
-  {name:"Nevezmu tě z klubu domů 2",type:"MUSIC VIDEO",text:"Pokračování série, která se stala jednou z nejvýraznějších částí rané videografie PTK.",meta:["Music video","Series"]},
-  {name:"Nevezmu tě z klubu domů 3",type:"MUSIC VIDEO",text:"Třetí část série. Videa Nevezmu tě z klubu domů se později dohromady dostala přes desítky milionů zhlédnutí.",meta:["Music video","Breakthrough"]},
-  {name:"Zobrazeno",type:"COLLABORATION",text:"Skladba Zobrazeno s Psycho Rhyme patří mezi spolupráce z této etapy.",meta:["Psycho Rhyme","Collaboration"]},
-  {name:"Jako oni",type:"SINGLE",text:"Jeden z tracků spojovaných s produktivním obdobím roku 2018.",meta:["Single","2018"]},
-  {name:"Molotov",type:"SINGLE",text:"Další položka z katalogu této éry. Archiv zachycuje širší vývoj, nejen velká alba.",meta:["Single","2018"]},
-  {name:"Takahiro ryuu 2",type:"SINGLE",text:"Track z období, kdy PTK vydával velké množství materiálu a rozšiřoval svůj katalog.",meta:["Single","2018"]},
-  {name:"Další releasy",type:"CATALOG",text:"Do širšího katalogu této éry patří také 12.1., Kudy oni jdou, Vyhul mi dick, ЛАБИРИНТ, Nemůžeš, Nemusim vstávat, Sama si to chtěla 2, Naomi, Molotov a další skladby. Přesná data jednotlivých uploadů se mohou lišit.",meta:["Archive","Singles"]}
+  {
+   title:"Od Chebu po Ostravu",
+   type:"FIRST TOUR",
+   description:"Rok 2018 začíná trackem Od Chebu po Ostravu. Stejný název nese první tour, na které PTK doprovází Schyzo, Darewin a Psycho Rhyme.",
+   tags:["2018","Tour","Schyzo","Darewin","Psycho Rhyme"],
+   link:"https://www.youtube.com/results?search_query=PTK+Od+Chebu+po+Ostravu",
+   linkLabel:"Search tour archive",
+   cover:"OD CHEBU PO OSTRAVU"
+  },
+  {
+   title:"Nevezmu tě z klubu domů 3",
+   type:"MUSIC VIDEO / SINGLE",
+   description:"Třetí díl série. Později se stává nejznámější částí trilogie a jeho videoklip překonává hranici 22 milionů zhlédnutí.",
+   tags:["2018","Music video","22M+ views"],
+   link:"https://www.youtube.com/watch?v=Vh18F_05lLw",
+   linkLabel:"Watch the third video",
+   cover:"NEVEZMU TĚ Z KLUBU DOMŮ 3",
+   video:"Vh18F_05lLw"
+  },
+  {
+   title:"12.1.",
+   type:"ALBUM / PROJECT",
+   description:"Projekt 12.1. je v diskografických katalozích vedený jako album z roku 2018. Důležitá položka raného katalogu PTK.",
+   tags:["2018","Album"],
+   link:"https://www.youtube.com/results?search_query=PTK+12.1.",
+   linkLabel:"Explore the release",
+   cover:"12.1."
+  },
+  {
+   title:"ЛАБИРИНТ",
+   type:"MUSIC VIDEO",
+   description:"Výrazný videoklip z roku 2018. Dobový profil ho zmiňuje jako příklad propracovanějšího vizuálu v období, kdy PTK vydával velké množství hudby.",
+   tags:["2018","Music video"],
+   link:"https://www.youtube.com/results?search_query=PTK+%D0%9B%D0%90%D0%91%D0%98%D0%A0%D0%98%D0%9D%D0%A2",
+   linkLabel:"Find the video",
+   cover:"ЛАБИРИНТ"
+  },
+  {
+   title:"Zobrazeno",
+   type:"COLLABORATION",
+   description:"Skladba s Psycho Rhyme z roku 2018. Jedna z položek rozsáhlého katalogu této éry.",
+   tags:["Psycho Rhyme","2018","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+Zobrazeno+Psycho+Rhyme",
+   linkLabel:"Search the track",
+   cover:"ZOBRAZENO"
+  },
+  {
+   title:"The 2018 catalog",
+   type:"FULL RELEASE ARCHIVE",
+   description:"Rok 2018 zahrnuje také Kudy oni jdou, Vyhul mi dick, Jako oni, Laboratoř, Takahiro ryuu 2, Nemůžeš, Nemusim vstávat, Sama si to chtěla 2, Nebudu ti hrát v 10, Musim zvládnout, Naomi, Vidim tě couvat, Molotov a Necham se pobavit.",
+   tags:["2018","Singles","Archive"],
+   link:"https://rapzzz.cz/cs/umelec/ptk/",
+   linkLabel:"Open the full discography",
+   cover:"2018 / FULL CATALOG"
+  }
  ]
 },
 {
- year:"2019",tag:"MORE THAN A MOMENT",title:"The catalog keeps growing.",
- description:"Nové singly, spolupráce a rozhovory. PTK dál rozvíjí vlastní cestu a zůstává aktivní na scéně.",
+ year:2019,
+ chapter:"MORE THAN A MOMENT",
+ title:"No slowing down.",
+ subtitle:"Singles, features and interviews.",
+ description:"Další releasy, hostování a rozhovory. PTK pokračuje ve vydávání jednotlivých tracků a budování vlastního katalogu.",
  events:[
-  {name:"Airplane mode",type:"SINGLE",text:"Jedna z nahrávek spojovaných s rokem 2019.",meta:["Single","2019"]},
-  {name:"Nemluv na mě",type:"SINGLE",text:"Track z období pokračujícího vydávání a budování vlastního katalogu.",meta:["Single","2019"]},
-  {name:"Nepřeháněj",type:"COLLABORATION",text:"Skladba s hostováním Sluggera. Spolupráce, která předchází pozdějšímu společnému projektu TRAP MENU.",meta:["Slugerr","Collaboration"]},
-  {name:"BBarak interview",type:"INTERVIEW",text:"Rozhovor publikovaný 25. srpna 2019. Důležitý zdroj pro dobový pohled na PTK, jeho kariéru a přístup k hudbě.",meta:["25 August 2019","Interview"]},
-  {name:"2019 catalog",type:"ARCHIVE",text:"Mezi další skladby spojované s tímto obdobím patří Dělá že mě zná, Nechytíš mě, Tak jako žádná, Dlouho, GÔŇO, Jen to co musim a Neděle v pondělí večer / Ráno do práce.",meta:["Singles","Archive"]}
+  {
+   title:"Airplane mode",
+   type:"SINGLE",
+   description:"Singl z roku 2019, který patří do katalogu této éry.",
+   tags:["2019","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+Airplane+mode",
+   linkLabel:"Find the track",
+   cover:"AIRPLANE MODE"
+  },
+  {
+   title:"Nepřeháněj",
+   type:"COLLABORATION",
+   description:"Track s hostováním Sluggera. Spolupráce, která předchází jejich pozdějšímu společnému projektu TRAP MENU.",
+   tags:["Slugerr","2019","Collaboration"],
+   link:"https://www.youtube.com/results?search_query=PTK+Nep%C5%99eh%C3%A1n%C4%9Bj+Slugerr",
+   linkLabel:"Find the track",
+   cover:"NEPŘEHÁNĚJ"
+  },
+  {
+   title:"BBarak interview",
+   type:"INTERVIEW",
+   description:"Rozhovor publikovaný 25. srpna 2019. Důležitý dobový zdroj pro pohled na PTK, jeho přístup k hudbě a tehdejší kariéru.",
+   tags:["25 August 2019","Interview"],
+   link:"https://www.youtube.com/results?search_query=PTK+BBarak+interview+2019",
+   linkLabel:"Search the interview",
+   cover:"INTERVIEW"
+  },
+  {
+   title:"2019 singles",
+   type:"FULL RELEASE ARCHIVE",
+   description:"Do katalogu roku 2019 patří Nemluv na mě, Dělá že mě zná, Nechytíš mě, Tak jako žádná, Dlouho, GÔŇO, Jen to co musim a Neděle v pondělí večer / Ráno do práce.",
+   tags:["2019","Singles","Archive"],
+   link:"https://rapzzz.cz/cs/umelec/ptk/",
+   linkLabel:"Open the full discography",
+   cover:"2019 / FULL CATALOG"
+  }
  ]
 },
 {
- year:"2020",tag:"THE NEXT STEP",title:"A different direction.",
- description:"Přichází EP Nazpět dávat a další singly. PTK postupně směřuje k nové etapě, která vyústí v alba roku 2021.",
+ year:2020,
+ chapter:"THE NEXT STEP",
+ title:"A new direction.",
+ subtitle:"The years before the breakthrough.",
+ description:"EP Nazpět dávat a další singly. PTK postupně směřuje k albové etapě, která přijde v roce 2021.",
  events:[
-  {name:"Nazpět dávat",type:"EP",text:"EP Nazpět dávat patří mezi důležité releasy roku 2020 a představuje další krok ve vývoji PTK.",meta:["EP","2020"]},
-  {name:"Na Zadním Sedadle",type:"SINGLE",text:"Singl vydaný 22. června 2020.",meta:["22 June 2020","Single"]},
-  {name:"Dlouhý Časy",type:"SINGLE",text:"Singl vydaný 1. listopadu 2020. Další kapitola před albovým obdobím roku 2021.",meta:["1 November 2020","Single"]}
+  {
+   title:"Nazpět Dávat",
+   type:"EP",
+   description:"EP z roku 2020. Jeden z důležitých projektů před albovou sérií, která začne v roce 2021.",
+   tags:["2020","EP"],
+   link:"https://www.youtube.com/results?search_query=PTK+Nazp%C4%9Bt+D%C3%A1vat",
+   linkLabel:"Explore the EP",
+   cover:"NAZPĚT DÁVAT"
+  },
+  {
+   title:"Dlouhý Časy",
+   type:"SINGLE",
+   description:"Singl vydaný 1. listopadu 2020. Další důležitý release před albovým obdobím.",
+   tags:["1 November 2020","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+Dlouh%C3%BD+%C4%8Casy",
+   linkLabel:"Find the track",
+   cover:"DLOUHÝ ČASY"
+  },
+  {
+   title:"Na Okraji Města Sám",
+   type:"SINGLE",
+   description:"Skladba z roku 2020, která patří do širšího katalogu tohoto období.",
+   tags:["2020","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+Na+Okraji+M%C4%9Bsta+S%C3%A1m",
+   linkLabel:"Find the track",
+   cover:"NA OKRAJI MĚSTA SÁM"
+  },
+  {
+   title:"Klid",
+   type:"COLLABORATION",
+   description:"Spolupráce se Sluggerrem z roku 2020.",
+   tags:["Slugerr","2020","Collaboration"],
+   link:"https://www.youtube.com/results?search_query=PTK+Slugerr+Klid",
+   linkLabel:"Find the track",
+   cover:"KLID"
+  }
  ]
 },
 {
- year:"2021",tag:"A NEW ERA",title:"27. A new beginning.",
- description:"Rok zásadních projektů. PTK vydává několik alb a výrazně rozšiřuje svou diskografii.",
+ year:2021,
+ chapter:"A NEW ERA",
+ title:"27.",
+ subtitle:"The album era begins.",
+ description:"Rok zásadních projektů. 27, Utopený v čase a Bad Vibe. PTK přechází do další úrovně své diskografie.",
  events:[
-  {name:"27",type:"ALBUM",text:"Album 27 vychází 16. ledna 2021, v den narozenin PTK. Patří k zásadním projektům jeho diskografie.",meta:["16 January 2021","Album"]},
-  {name:"Utopený v čase",type:"ALBUM",text:"Album vydané 1. května 2021. Další velký projekt v mimořádně produktivním roce.",meta:["1 May 2021","Album"]},
-  {name:"Bad Vibe",type:"ALBUM",text:"Album Bad Vibe vychází 1. září 2021 a uzavírá mimořádně aktivní období tří velkých projektů.",meta:["1 September 2021","Album"]},
-  {name:"To se ti líbí ?!",type:"COLLABORATION",text:"Projekt se Sluggerrem. Spolupráce, která propojuje jejich společnou hudební cestu.",meta:["Slugerr","Collaboration"]},
-  {name:"Moje Tráva",type:"SINGLE",text:"Singl z roku 2021, který patří do katalogu této éry.",meta:["Single","2021"]}
+  {
+   title:"27",
+   type:"ALBUM",
+   description:"Album 27 vychází 16. ledna 2021, v den narozenin PTK. Patří k zásadním projektům jeho diskografie a pomáhá dostat jeho hudbu k širšímu publiku.",
+   tags:["16 January 2021","Album"],
+   link:"https://open.spotify.com/search/PTK%2027",
+   linkLabel:"Listen on Spotify",
+   cover:"27"
+  },
+  {
+   title:"Utopený v čase",
+   type:"ALBUM",
+   description:"Album vydané 1. května 2021. Další velký projekt v mimořádně produktivním roce.",
+   tags:["1 May 2021","Album"],
+   link:"https://open.spotify.com/search/PTK%20Utopen%C3%BD%20v%20%C4%8Dase",
+   linkLabel:"Listen on Spotify",
+   cover:"UTOPENÝ V ČASE"
+  },
+  {
+   title:"Bad Vibe",
+   type:"ALBUM",
+   description:"Album Bad Vibe vychází 1. září 2021 a uzavírá mimořádně aktivní období tří velkých projektů.",
+   tags:["1 September 2021","Album"],
+   link:"https://open.spotify.com/search/PTK%20Bad%20Vibe",
+   linkLabel:"Listen on Spotify",
+   cover:"BAD VIBE"
+  },
+  {
+   title:"To se ti líbí ?!",
+   type:"COLLAB EP",
+   description:"Společný projekt se Sluggerrem. Důležitá spolupráce, která propojuje jejich hudební cestu.",
+   tags:["Slugerr","2021","EP"],
+   link:"https://open.spotify.com/search/PTK%20Slugerr%20To%20se%20ti%20l%C3%ADb%C3%AD",
+   linkLabel:"Listen on Spotify",
+   cover:"TO SE TI LÍBÍ ?!"
+  },
+  {
+   title:"Střízlivý",
+   type:"SINGLE",
+   description:"Singl z roku 2021, který patří do katalogu této éry.",
+   tags:["2021","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+St%C5%99%C3%ADzliv%C3%BD",
+   linkLabel:"Find the track",
+   cover:"STŘÍZLIVÝ"
+  },
+  {
+   title:"Moje Tráva",
+   type:"SINGLE",
+   description:"Další singl z roku 2021 a součást rozšiřujícího se katalogu PTK.",
+   tags:["2021","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+Moje+Tr%C3%A1va",
+   linkLabel:"Find the track",
+   cover:"MOJE TRÁVA"
+  }
  ]
 },
 {
- year:"2022",tag:"BREAKTHROUGH",title:"TRAPPIN LONELY.",
- description:"Z undergroundového jména se stává výrazná síla českého rapu. TRAPPIN LONELY přináší velký kariérní posun.",
+ year:2022,
+ chapter:"TRAPPIN LONELY",
+ title:"The underground goes #1.",
+ subtitle:"A new level of recognition.",
+ description:"TRAPPIN LONELY se dostává na první místo českého albového žebříčku. PTK se stává jedním z nejvýraznějších jmen českého rapu.",
  events:[
-  {name:"TRAPPIN LONELY",type:"ALBUM",text:"Album vychází 3. června 2022 a dostává se na první místo českého albového žebříčku. Jeden z největších milníků kariéry PTK.",meta:["3 June 2022","Album","#1 Czech chart"]},
-  {name:"NABIJ MI TEN SMOKE",type:"SINGLE",text:"Výrazný singl z roku 2022, součást období TRAPPIN LONELY.",meta:["Single","2022"]},
-  {name:"TEČE KREV",type:"SINGLE",text:"Další releas z roku 2022, který rozšiřuje katalog této éry.",meta:["Single","2022"]},
-  {name:"Baby a Benzo",type:"COLLABORATION",text:"Spolupráce s Yzomandiasem. Důležitý moment propojení PTK s širší českou rapovou scénou.",meta:["Yzomandias","Collaboration"]},
-  {name:"Vrátit se zpátky",type:"EP",text:"Společný projekt s Eddiem Frescem, vydaný 29. září 2022.",meta:["29 September 2022","Eddie Fresco","EP"]}
+  {
+   title:"TRAPPIN LONELY",
+   type:"ALBUM / #1",
+   description:"Album vydané 3. června 2022. Vstoupilo do českého albového žebříčku na první místo. Jeden z největších kariérních milníků PTK.",
+   tags:["3 June 2022","Album","#1 Czech chart"],
+   link:"https://open.spotify.com/search/PTK%20TRAPPIN%20LONELY",
+   linkLabel:"Listen on Spotify",
+   cover:"TRAPPIN LONELY"
+  },
+  {
+   title:"NABIJ MI TEN SMOKE",
+   type:"SINGLE",
+   description:"Výrazný singl z roku 2022, součást období TRAPPIN LONELY.",
+   tags:["2022","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+NABIJ+MI+TEN+SMOKE",
+   linkLabel:"Find the track",
+   cover:"NABIJ MI TEN SMOKE"
+  },
+  {
+   title:"TEČE KREV",
+   type:"SINGLE",
+   description:"Další release z roku 2022, který rozšiřuje katalog této éry.",
+   tags:["2022","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+TE%C4%8CE+KREV",
+   linkLabel:"Find the track",
+   cover:"TEČE KREV"
+  },
+  {
+   title:"Baby a Benzo",
+   type:"COLLABORATION",
+   description:"Spolupráce s Yzomandiasem. Skladba se dostala na druhé místo české hitparády a stala se platinovým singlem.",
+   tags:["Yzomandias","2022","Platinum"],
+   link:"https://www.youtube.com/results?search_query=PTK+Yzomandias+Baby+a+Benzo",
+   linkLabel:"Find the track",
+   cover:"BABY A BENZO"
+  },
+  {
+   title:"Vrátit se zpátky",
+   type:"EP / EDDIE FRESCO",
+   description:"Společný projekt s Eddiem Frescem, vydaný 29. září 2022.",
+   tags:["29 September 2022","Eddie Fresco","EP"],
+   link:"https://open.spotify.com/search/PTK%20Eddie%20Fresco",
+   linkLabel:"Listen on Spotify",
+   cover:"VRÁTIT SE ZPÁTKY"
+  }
  ]
 },
 {
- year:"2023",tag:"THE BIG YEAR",title:"Three projects. One unstoppable run.",
- description:"Jeden z nejproduktivnějších roků PTK. GOLDEN HILL, TRAP MENU a SILENT KILL. Nové spolupráce, velká čísla a vlastní tour.",
+ year:2023,
+ chapter:"THE BIG YEAR",
+ title:"Three projects. One year.",
+ subtitle:"GOLDEN HILL. TRAP MENU. SILENT KILL.",
+ description:"Jeden z nejproduktivnějších roků PTK. Tři velké projekty, výrazné spolupráce, nové rekordy a vlastní tour.",
  events:[
-  {name:"GOLDEN HILL",type:"ALBUM",text:"Album vydané 29. ledna 2023. První z velkých projektů, které PTK v tomto roce vydal.",meta:["29 January 2023","Album"]},
-  {name:"TRAP MENU",type:"COLLAB ALBUM",text:"Společné album se Sluggerrem, vydané 31. května 2023. Track Nikdy broke se dostal přes milion zhlédnutí.",meta:["31 May 2023","Slugerr","Album"]},
-  {name:"SILENT KILL",type:"ALBUM",text:"Album vydané 2. září 2023. Další zásadní projekt v roce, kdy PTK vydal tři velké nahrávky.",meta:["2 September 2023","Album"]},
-  {name:"VZHŮRU CELOU NOC",type:"COLLABORATION",text:"Skladba s Viktorem Sheenem. Výrazné propojení dvou jmen českého rapu.",meta:["Viktor Sheen","Collaboration"]},
-  {name:"SUNSET",type:"COLLABORATION",text:"Společný track se Separ a Jerry Lee. Další přesah mimo českou scénu.",meta:["Separ","Jerry Lee","Collaboration"]},
-  {name:"V SOBĚ NESEŠ SVĚTLO",type:"SINGLE",text:"Další výrazný release z roku 2023.",meta:["Single","2023"]},
-  {name:"SILENT KILL TOUR",type:"TOUR",text:"Koncertní tour navazující na album SILENT KILL. PTK se stále výrazněji přesouvá z internetového undergroundu na velká pódia.",meta:["Live","Tour 2023"]},
-  {name:"37 new tracks",type:"MILESTONE",text:"V říjnu 2023 Refresher upozornil na mimořádnou produktivitu PTK: během roku měl na kontě 37 nových skladeb včetně hostování.",meta:["Refresher","2023","Productivity"]}
+  {
+   title:"GOLDEN HILL",
+   type:"ALBUM / #1",
+   description:"Album vydané 29. ledna 2023. Dostalo se na první místo českého albového žebříčku.",
+   tags:["29 January 2023","Album","#1 Czech chart"],
+   link:"https://open.spotify.com/search/PTK%20GOLDEN%20HILL",
+   linkLabel:"Listen on Spotify",
+   cover:"GOLDEN HILL"
+  },
+  {
+   title:"TRAP MENU",
+   type:"COLLAB ALBUM",
+   description:"Společné album se Sluggerrem, vydané 31. května 2023. Další důležitá kapitola jejich společné hudební cesty.",
+   tags:["31 May 2023","Slugerr","Album"],
+   link:"https://open.spotify.com/search/PTK%20Slugerr%20TRAP%20MENU",
+   linkLabel:"Listen on Spotify",
+   cover:"TRAP MENU"
+  },
+  {
+   title:"SILENT KILL",
+   type:"ALBUM / #1",
+   description:"Album vydané 2. září 2023. Dostalo se na první místo českého žebříčku a přineslo další výrazné spolupráce.",
+   tags:["2 September 2023","Album","#1 Czech chart"],
+   link:"https://open.spotify.com/search/PTK%20SILENT%20KILL",
+   linkLabel:"Listen on Spotify",
+   cover:"SILENT KILL"
+  },
+  {
+   title:"VZHŮRU CELOU NOC",
+   type:"COLLABORATION / #1",
+   description:"Skladba s Viktorem Sheenem z alba SILENT KILL. Dva týdny na prvním místě české hitparády a platinové ocenění.",
+   tags:["Viktor Sheen","Platinum","#1"],
+   link:"https://www.youtube.com/results?search_query=PTK+Viktor+Sheen+VZH%C5%AERU+CELOU+NOC",
+   linkLabel:"Find the track",
+   cover:"VZHŮRU CELOU NOC"
+  },
+  {
+   title:"SUNSET",
+   type:"COLLABORATION / PLATINUM",
+   description:"Skladba se Separ a Jerry Lee. Dostala se na páté místo hitparády a získala platinové ocenění.",
+   tags:["Separ","Jerry Lee","Platinum"],
+   link:"https://www.youtube.com/results?search_query=Separ+PTK+Jerry+Lee+SUNSET",
+   linkLabel:"Find the track",
+   cover:"SUNSET"
+  },
+  {
+   title:"FOREIGN",
+   type:"COLLABORATION",
+   description:"Spolupráce se Sluggerrem z roku 2023.",
+   tags:["Slugerr","2023","Collaboration"],
+   link:"https://www.youtube.com/results?search_query=PTK+Slugerr+FOREIGN",
+   linkLabel:"Find the track",
+   cover:"FOREIGN"
+  },
+  {
+   title:"Novej Svět",
+   type:"COLLABORATION",
+   description:"Spolupráce Yzomandiase, Nik Tenda a PTK z roku 2023.",
+   tags:["Yzomandias","Nik Tendo","2023"],
+   link:"https://www.youtube.com/results?search_query=Yzomandias+Nik+Tendo+PTK+Novej+Sv%C4%9Bt",
+   linkLabel:"Find the track",
+   cover:"NOVEJ SVĚT"
+  },
+  {
+   title:"SILENT KILL TOUR",
+   type:"TOUR / LIVE",
+   description:"Koncertní tour navazující na album SILENT KILL. PTK se stále výrazněji přesouvá z internetového undergroundu na velká pódia.",
+   tags:["2023","Tour","Live"],
+   link:"https://www.youtube.com/results?search_query=PTK+Silent+Kill+Tour",
+   linkLabel:"Search live footage",
+   cover:"SILENT KILL TOUR"
+  },
+  {
+   title:"37 new tracks",
+   type:"CAREER MILESTONE",
+   description:"V říjnu 2023 Refresher upozornil na mimořádnou produktivitu PTK. Za rok měl na kontě 37 novinek včetně hostování, z nichž vznikly tři desky.",
+   tags:["2023","37 tracks","Refresher"],
+   link:"https://www.refresher.cz/",
+   linkLabel:"Explore Refresher",
+   cover:"37 NEW TRACKS"
+  }
  ]
 },
 {
- year:"2024",tag:"PAINKILLERS",title:"A heavyweight collaboration.",
- description:"Společný projekt s Yzomandiasem. PTK vstupuje do dalšího období s velkým albem a stále širším dosahem.",
+ year:2024,
+ chapter:"PAINKILLERS",
+ title:"A heavyweight collaboration.",
+ subtitle:"PTK × Yzomandias.",
+ description:"Společný projekt s Yzomandiasem, velké singly a další rozšíření PTK katalogu.",
  events:[
-  {name:"PAINKILLERS",type:"COLLAB ALBUM",text:"Společné album PTK a Yzomandiase vydané v listopadu 2024. Projekt se dostal na druhé místo českého žebříčku a později se deluxe edice dostala na první místo.",meta:["November 2024","Yzomandias","Album"]},
-  {name:"KSN",type:"SINGLE",text:"Skladba z období kolem projektu PAINKILLERS.",meta:["Single","2024"]},
-  {name:"No Sleep Gang / Get Low",type:"RELEASE",text:"Release z roku 2024, který patří do katalogu této etapy.",meta:["2024","Single"]},
-  {name:"V Kuchyni",type:"SINGLE",text:"Další položka diskografie roku 2024.",meta:["Single","2024"]},
-  {name:"Uprostřed Oceánu",type:"SINGLE",text:"Singl vydaný v roce 2024.",meta:["Single","2024"]},
-  {name:"CHCEME HULENÍ 2021",type:"RELEASE",text:"Release, který se objevil v katalogu PTK v roce 2024.",meta:["2024","Release"]}
+  {
+   title:"PAINKILLERS",
+   type:"COLLAB ALBUM",
+   description:"Společné album PTK a Yzomandiase vydané v listopadu 2024. Do českého albového žebříčku vstoupilo na druhé místo.",
+   tags:["November 2024","Yzomandias","Album"],
+   link:"https://open.spotify.com/search/PTK%20Yzomandias%20Painkillers",
+   linkLabel:"Listen on Spotify",
+   cover:"PAINKILLERS"
+  },
+  {
+   title:"KSN",
+   type:"SINGLE / PLATINUM",
+   description:"Skladba s Yzomandiasem z alba PAINKILLERS. V české hitparádě dosáhla druhého místa a získala platinové ocenění.",
+   tags:["Yzomandias","Platinum","2024"],
+   link:"https://www.youtube.com/results?search_query=PTK+Yzomandias+KSN",
+   linkLabel:"Find the track",
+   cover:"KSN"
+  },
+  {
+   title:"No Sleep Gang",
+   type:"SINGLE / PLATINUM",
+   description:"Skladba Yzomandiase a PTK z projektu PAINKILLERS. Dostala se na páté místo hitparády a získala platinové ocenění.",
+   tags:["Yzomandias","Platinum","2024"],
+   link:"https://www.youtube.com/results?search_query=Yzomandias+PTK+No+Sleep+Gang",
+   linkLabel:"Find the track",
+   cover:"NO SLEEP GANG"
+  },
+  {
+   title:"Painkillers",
+   type:"TITLE TRACK / PLATINUM",
+   description:"Titulní skladba s Yzomandiasem, Lucou Brassi10x a Le Winter. Patří mezi platinové singly projektu.",
+   tags:["Yzomandias","Luca Brassi10x","Le Winter"],
+   link:"https://www.youtube.com/results?search_query=PTK+Yzomandias+Painkillers",
+   linkLabel:"Find the track",
+   cover:"PAINKILLERS"
+  },
+  {
+   title:"CHCEME HULENÍ 2021",
+   type:"EP / RELEASE",
+   description:"Projekt vydaný v roce 2024, vedený v diskografických katalozích jako EP.",
+   tags:["2024","EP"],
+   link:"https://open.spotify.com/search/PTK%20CHCEME%20HULEN%C3%8D%202021",
+   linkLabel:"Listen on Spotify",
+   cover:"CHCEME HULENÍ 2021"
+  },
+  {
+   title:"O Cinzeiro",
+   type:"EP / RELEASE",
+   description:"Další projekt evidovaný v diskografii PTK pro rok 2024.",
+   tags:["2024","EP"],
+   link:"https://open.spotify.com/search/PTK%20O%20Cinzeiro",
+   linkLabel:"Find the release",
+   cover:"O CINZEIRO"
+  }
  ]
 },
 {
- year:"2025",tag:"KARAKORAM",title:"A new peak.",
- description:"Nová éra, nové projekty a další úspěchy. KARAKORAM potvrzuje PTK na vrcholu české rapové scény.",
+ year:2025,
+ chapter:"KARAKORAM",
+ title:"A new peak.",
+ subtitle:"The next level.",
+ description:"KARAKORAM, Archive, deluxe PAINKILLERS a další velké úspěchy. PTK potvrzuje pozici na vrcholu české rapové scény.",
  events:[
-  {name:"KARAKORAM",type:"ALBUM",text:"Album vydané v říjnu 2025. Dostalo se na první místo českého žebříčku a na vrcholu se drželo šest týdnů.",meta:["October 2025","Album","#1 Czech chart"]},
-  {name:"Archive",type:"ALBUM",text:"Další album vydané v roce 2025, součást rozšiřujícího se katalogu PTK.",meta:["2025","Album"]},
-  {name:"Painkillers (overdose edition)",type:"DELUXE",text:"Rozšířená edice projektu PAINKILLERS, která se v létě 2025 dostala na první místo českého žebříčku.",meta:["2025","Deluxe","Yzomandias"]},
-  {name:"Big Stepper",type:"SINGLE",text:"Skladba, která získala platinové ocenění. Jeden z výrazných momentů éry KARAKORAM.",meta:["2025","Platinum"]},
-  {name:"Snad se tam nebude střílet",type:"SINGLE",text:"Release z roku 2025, který rozšiřuje katalog období KARAKORAM.",meta:["2025","Single"]},
-  {name:"Big Stepper RMX",type:"REMIX",text:"Remix s NobodyListen vydaný v roce 2025.",meta:["NobodyListen","Remix"]},
-  {name:"KSN (PINTLICH REMIX)",type:"REMIX",text:"Remix vydaný v roce 2025.",meta:["Remix","2025"]},
-  {name:"Ceny Anděl",type:"NOMINATION",text:"KARAKORAM se objevil mezi nominovanými projekty v rapové kategorii Cen Anděl.",meta:["Ceny Anděl","Rap"]}
+  {
+   title:"KARAKORAM",
+   type:"ALBUM / #1",
+   description:"Album vydané v říjnu 2025. Na prvním místě českého albového žebříčku se drželo šest týdnů a získalo nominaci na Cenu Anděl v kategorii Rap.",
+   tags:["October 2025","Album","#1","Ceny Anděl"],
+   link:"https://open.spotify.com/search/PTK%20KARAKORAM",
+   linkLabel:"Listen on Spotify",
+   cover:"KARAKORAM"
+  },
+  {
+   title:"Archive",
+   type:"ALBUM",
+   description:"Album Archive vydané v roce 2025. Další položka diskografie PTK v období KARAKORAM.",
+   tags:["2025","Album"],
+   link:"https://open.spotify.com/search/PTK%20Archive",
+   linkLabel:"Listen on Spotify",
+   cover:"ARCHIVE"
+  },
+  {
+   title:"Painkillers (overdose edition)",
+   type:"DELUXE ALBUM",
+   description:"Rozšířená edice společného projektu s Yzomandiasem. V létě 2025 se dostala na první místo českého albového žebříčku.",
+   tags:["2025","Deluxe","Yzomandias","#1"],
+   link:"https://open.spotify.com/search/Painkillers%20overdose%20edition",
+   linkLabel:"Listen on Spotify",
+   cover:"PAINKILLERS / OVERDOSE"
+  },
+  {
+   title:"Big Stepper",
+   type:"PLATINUM SINGLE",
+   description:"Skladba z alba KARAKORAM, která získala platinové ocenění.",
+   tags:["KARAKORAM","Platinum","2025"],
+   link:"https://www.youtube.com/results?search_query=PTK+Big+Stepper",
+   linkLabel:"Find the track",
+   cover:"BIG STEPPER"
+  },
+  {
+   title:"Big Stepper RMX",
+   type:"REMIX",
+   description:"Remix s NobodyListen vydaný v roce 2025.",
+   tags:["NobodyListen","Remix","2025"],
+   link:"https://www.youtube.com/results?search_query=PTK+NobodyListen+Big+Stepper+RMX",
+   linkLabel:"Find the remix",
+   cover:"BIG STEPPER RMX"
+  },
+  {
+   title:"KSN — PINTLICH REMIX",
+   type:"REMIX",
+   description:"Remix skladby KSN s Ektorem, Robinem Zootem a Nik Tendem. V hitparádě strávil čtyři týdny na prvním místě.",
+   tags:["Ektor","Robin Zoot","Nik Tendo","#1"],
+   link:"https://www.youtube.com/results?search_query=KSN+PINTLICH+REMIX",
+   linkLabel:"Find the remix",
+   cover:"KSN / PINTLICH REMIX"
+  },
+  {
+   title:"Ceny Anděl",
+   type:"NOMINATION",
+   description:"Album KARAKORAM získalo nominaci na Cenu Anděl v rapové kategorii.",
+   tags:["2025","Ceny Anděl","Rap"],
+   link:"https://www.cenyandel.cz/",
+   linkLabel:"Ceny Anděl",
+   cover:"CENY ANDĚL"
+  }
  ]
 },
 {
- year:"2026",tag:"RIGHT NOW",title:"The story is still being written.",
- description:"KARAKORAM DLC, nové singly a další EP. Archiv se dostává až do současnosti — a příběh pokračuje.",
+ year:2026,
+ chapter:"RIGHT NOW",
+ title:"Still writing history.",
+ subtitle:"The chain keeps growing.",
+ description:"KARAKORAM DLC, nové singly, spolupráce a aktuální koncertní období. Příběh PTK pokračuje.",
  events:[
-  {name:"KARAKORAM DLC",type:"ALBUM",text:"Rozšíření projektu KARAKORAM, vydané 11. května 2026.",meta:["11 May 2026","Album","DLC"]},
-  {name:"KENPACHI&YACHIRU",type:"SINGLE",text:"Singl vydaný 21. dubna 2026. Další výrazný release současné éry.",meta:["21 April 2026","Single"]},
-  {name:"GONE",type:"COLLABORATION",text:"Skladba s Kairo Keyz, vydaná v roce 2026.",meta:["Kairo Keyz","2026"]},
-  {name:"KURVY V POZORU",type:"COLLABORATION",text:"Skladba s Eclipse. Vydaná v roce 2026, ale na finální tracklist nového EP se nedostala.",meta:["Eclipse","2026"]},
-  {name:"Nádech",type:"SINGLE",text:"Singl vydaný 5. listopadu 2026. Později se dostal také na tracklist nového EP.",meta:["5 November 2026","Single"]},
-  {name:"Čím víc toho mám, tím dál od domova jsem",type:"EP",text:"Pětiskladbové EP vydané 10. listopadu 2026. Název odkazuje na cestu z malého města do celorepublikového povědomí. Mezi skladbami je Nádech a očekávaná spolupráce Teď nebo nikdy s Viktorem Sheenem.",meta:["10 November 2026","5 tracks","EP"]},
-  {name:"Teď nebo nikdy",type:"COLLABORATION",text:"Očekávaná spolupráce s Viktorem Sheenem, která se objevila na tracklistu nového EP.",meta:["Viktor Sheen","2026"]},
-  {name:"The next chapter",type:"TO BE CONTINUED",text:"Příběh pokračuje. Nové releasy, koncerty a další kapitoly budou do archivu postupně doplňovány.",meta:["Ongoing","Archive"]}
+  {
+   title:"KENPACHI&YACHIRU",
+   type:"SINGLE / #1",
+   description:"Singl vydaný v roce 2026. Dostal se na první místo české hitparády a získal platinové ocenění.",
+   tags:["2026","Platinum","#1"],
+   link:"https://www.youtube.com/results?search_query=PTK+KENPACHI%26YACHIRU",
+   linkLabel:"Find the track",
+   cover:"KENPACHI&YACHIRU"
+  },
+  {
+   title:"KARAKORAM DLC",
+   type:"ALBUM / #1",
+   description:"Rozšíření projektu KARAKORAM, které se po vydání v roce 2026 dostalo na první místo českého albového žebříčku.",
+   tags:["2026","DLC","Album","#1"],
+   link:"https://open.spotify.com/search/PTK%20KARAKORAM%20DLC",
+   linkLabel:"Listen on Spotify",
+   cover:"KARAKORAM DLC"
+  },
+  {
+   title:"GONE",
+   type:"COLLABORATION",
+   description:"Skladba s Kairo Keyz vydaná v roce 2026.",
+   tags:["Kairo Keyz","2026","Collaboration"],
+   link:"https://www.youtube.com/results?search_query=PTK+Kairo+Keyz+GONE",
+   linkLabel:"Find the track",
+   cover:"GONE"
+  },
+  {
+   title:"KURVY V POZORU",
+   type:"COLLABORATION / #1",
+   description:"Skladba s Eclipsem, která se v roce 2026 dostala na první místo hitparády a získala platinové ocenění.",
+   tags:["Eclipse","2026","Platinum"],
+   link:"https://www.youtube.com/results?search_query=PTK+Eclipse+KURVY+V+POZORU",
+   linkLabel:"Find the track",
+   cover:"KURVY V POZORU"
+  },
+  {
+   title:"Nádech",
+   type:"SINGLE",
+   description:"Singl vydaný 5. listopadu 2026. Později se objevil také na tracklistu nového EP.",
+   tags:["5 November 2026","Single"],
+   link:"https://www.youtube.com/results?search_query=PTK+N%C3%A1dech",
+   linkLabel:"Find the track",
+   cover:"NÁDECH"
+  },
+  {
+   title:"Čím víc toho mám, tím dál od domova jsem",
+   type:"EP",
+   description:"Pětiskladbové EP vydané 10. listopadu 2026. Název odkazuje na cestu od začátků k širšímu publiku. V tracklistu je také Nádech a spolupráce Teď nebo nikdy s Viktorem Sheenem.",
+   tags:["10 November 2026","5 tracks","EP"],
+   link:"https://open.spotify.com/search/PTK%20%C4%8C%C3%ADm%20v%C3%ADc%20toho%20m%C3%A1m",
+   linkLabel:"Find the EP",
+   cover:"ČÍM VÍC TOHO MÁM"
+  },
+  {
+   title:"Teď nebo nikdy",
+   type:"COLLABORATION",
+   description:"Spolupráce s Viktorem Sheenem, která se objevila na tracklistu nového EP.",
+   tags:["Viktor Sheen","2026","Collaboration"],
+   link:"https://www.youtube.com/results?search_query=PTK+Viktor+Sheen+Te%C4%8F+nebo+nikdy",
+   linkLabel:"Find the track",
+   cover:"TEĎ NEBO NIKDY"
+  },
+  {
+   title:"The Culture — 2026",
+   type:"LIVE / FESTIVAL",
+   description:"PTK vystoupil na zastávkách The Culture v Českých Budějovicích, Olomouci, Liberci a Plzni. Jde o doložené koncertní zastávky roku 2026.",
+   tags:["2026","Festival","Live"],
+   link:"https://www.theculture.cz/interpreti/ptk",
+   linkLabel:"See the concert archive",
+   cover:"LIVE 2026"
+  },
+  {
+   title:"The next chapter",
+   type:"TO BE CONTINUED",
+   description:"Nové releasy, koncerty, videoklipy a další důležité momenty budou postupně doplňovány. Řetěz se nezastavuje.",
+   tags:["Ongoing","Archive"],
+   link:"https://www.youtube.com/@HouskaCze_0",
+   linkLabel:"Continue exploring",
+   cover:"TO BE CONTINUED"
+  }
  ]
 }
 ];
 
-const track = document.getElementById("track");
-const yearMenu = document.getElementById("yearMenu");
-const archive = document.getElementById("archive");
-const hero = document.getElementById("hero");
-const progress = document.getElementById("progress");
-const navCount = document.getElementById("navCount");
-let current = 0;
-let targetX = 0;
-let currentX = 0;
-let isDragging = false;
-let dragStart = 0;
-let dragOrigin = 0;
-let touchStart = 0;
-let soundOn = false;
+/* ---------------------------------------------------------
+   DOM / CHAPTER GENERATION
+   --------------------------------------------------------- */
 
-function createChapter(chapter,index){
- const section = document.createElement("section");
- section.className = "chapter";
- section.dataset.index = index;
- const cards = chapter.events.map((event,i)=>`
-  <button class="event-card" data-chapter="${index}" data-event="${i}">
-   <span class="event-number">${String(i+1).padStart(2,"0")}</span>
-   <span><span class="event-name">${event.name}</span><span class="event-type">${event.type}</span></span>
-   <span class="event-arrow">↗</span>
-  </button>`).join("");
- section.innerHTML = `
-  <div class="chapter-content">
-   <div class="chapter-left">
-    <div class="chapter-tag">${chapter.tag}</div>
-    <h2 class="chapter-year">${chapter.year}</h2>
-    <div class="chapter-title">${chapter.title}</div>
-    <p class="chapter-description">${chapter.description}</p>
-   </div>
-   <div class="chapter-right">${cards}</div>
+const stage=document.getElementById("yearStage");
+const selector=document.getElementById("yearSelector");
+const overlay=document.getElementById("detailOverlay");
+const detailTitle=document.getElementById("detailTitle");
+const detailYear=document.getElementById("detailYear");
+const detailDescription=document.getElementById("detailDescription");
+const detailTags=document.getElementById("detailTags");
+const detailActions=document.getElementById("detailActions");
+const detailCover=document.getElementById("detailCover");
+const detailNote=document.getElementById("detailNote");
+
+let activeYear=0;
+let targetProgress=0;
+let cameraProgress=0;
+let dragging=false;
+let dragStart=0;
+let dragOrigin=0;
+let lastTouchX=0;
+let chainPins=[];
+let chapterElements=[];
+let yearButtons=[];
+
+function makeChapter(data,index){
+ const section=document.createElement("section");
+ section.className="year-content";
+ section.dataset.index=index;
+ section.innerHTML=`
+  <div class="year-top">
+   <div class="year-index">${data.chapter} / PTK ARCHIVE</div>
+   <h2 class="year-number">${data.year}</h2>
+   <div class="year-heading">${data.title}</div>
+   <p class="year-description">${data.description}</p>
   </div>
-  <div class="chapter-index">PTK ARCHIVE&nbsp; / &nbsp;${String(index+1).padStart(2,"0")}</div>
-  <div class="chapter-side">${chapter.year} — ${chapter.tag}</div>`;
- track.appendChild(section);
- const dot=document.createElement("button");
- dot.className="year-dot";
- dot.textContent=chapter.year;
- dot.addEventListener("click",()=>goTo(index));
- yearMenu.appendChild(dot);
-}
-chapters.forEach(createChapter);
-const end=document.createElement("section");
-end.className="archive-end";
-end.innerHTML=`<div><div class="eyebrow">The story continues</div><h2>NOT THE<br>END.</h2><p>PTK — THE CHAIN ARCHIVE</p></div>`;
-track.appendChild(end);
-const total=chapters.length+1;
+  <div class="chain-guide"></div>
+  <div class="chain-caption">THE CHAIN CONNECTS EVERY MOMENT</div>
+  <div class="event-layer"></div>
+  <div class="year-bottom"><span class="bottom-line"></span><span>${data.subtitle}</span></div>
+  <div class="event-count">${String(data.events.length).padStart(2,"0")} ARCHIVE ENTRIES</div>
+ `;
+ stage.appendChild(section);
+ chapterElements.push(section);
 
-function maxScroll(){return Math.max(0,track.scrollWidth-window.innerWidth)}
+ const button=document.createElement("button");
+ button.className="year-select";
+ button.textContent=data.year;
+ button.addEventListener("click",()=>goTo(index));
+ selector.appendChild(button);
+ yearButtons.push(button);
+}
+archiveData.forEach(makeChapter);
+
+function buildPins(){
+ chainPins=[];
+ archiveData.forEach((year,yearIndex)=>{
+  const section=chapterElements[yearIndex];
+  const layer=section.querySelector(".event-layer");
+  year.events.forEach((event,eventIndex)=>{
+   const pin=document.createElement("button");
+   pin.className="event-pin "+(eventIndex%2===0?"up":"down");
+   pin.setAttribute("aria-label",event.title);
+   pin.innerHTML=`
+    <span class="pin-ring"></span>
+    <span class="pin-core"></span>
+    <span class="pin-label">
+     <span class="pin-title">${event.title}</span>
+     <span class="pin-type">${event.type}</span>
+    </span>
+   `;
+   pin.addEventListener("click",()=>openDetail(yearIndex,eventIndex));
+   layer.appendChild(pin);
+   chainPins.push({element:pin,yearIndex,eventIndex});
+  });
+ });
+}
+buildPins();
+
+/* ---------------------------------------------------------
+   NAVIGATION
+   --------------------------------------------------------- */
+
+const hero=document.getElementById("hero");
+const archive=document.getElementById("archive");
+const endScreen=document.getElementById("endScreen");
+const navNumber=document.getElementById("navNumber");
+const progressBar=document.getElementById("progressBar");
+
 function goTo(index){
- current=Math.max(0,Math.min(total-1,index));
- targetX=current*window.innerWidth;
- if(current>=chapters.length)targetX=maxScroll();
- updateUI();
+ activeYear=Math.max(0,Math.min(archiveData.length,index));
+ targetProgress=activeYear;
+ updateInterface();
 }
-function updateUI(){
- const realIndex=Math.min(current,chapters.length-1);
- document.querySelectorAll(".year-dot").forEach((dot,i)=>dot.classList.toggle("active",i===realIndex && current<chapters.length));
- document.querySelectorAll(".chapter").forEach((el,i)=>el.classList.toggle("active",i===realIndex));
- navCount.textContent=`${String(current+1).padStart(2,"0")} / ${String(total).padStart(2,"0")}`;
- progress.style.width=`${(targetX/Math.max(1,maxScroll()))*100}%`;
- document.body.classList.toggle("light",current%2===1 && current<chapters.length);
+function updateInterface(){
+ const atEnd=activeYear>=archiveData.length;
+ chapterElements.forEach((el,i)=>el.classList.toggle("active",i===activeYear));
+ yearButtons.forEach((el,i)=>el.classList.toggle("active",i===activeYear));
+ endScreen.classList.toggle("active",atEnd);
+ navNumber.textContent=atEnd?"END / END":`${archiveData[activeYear].year} / 2026`;
+ document.body.classList.toggle("light",!atEnd && activeYear%2===1);
+ progressBar.style.width=`${activeYear/archiveData.length*100}%`;
 }
-function animate(){
- currentX += (targetX-currentX)*.095;
- if(Math.abs(targetX-currentX)<.1)currentX=targetX;
- track.style.transform=`translate3d(${-currentX}px,0,0)`;
- requestAnimationFrame(animate);
-}
-requestAnimationFrame(animate);
-
 document.getElementById("enter").addEventListener("click",()=>{
- hero.classList.add("hidden");
+ hero.classList.add("out");
  archive.classList.add("active");
  goTo(0);
 });
-document.getElementById("next").addEventListener("click",()=>goTo(current+1));
-document.getElementById("prev").addEventListener("click",()=>goTo(current-1));
-
-window.addEventListener("wheel",e=>{
- if(!archive.classList.contains("active"))return;
- if(document.getElementById("detailOverlay").classList.contains("open"))return;
- e.preventDefault();
- const delta=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
- targetX=Math.max(0,Math.min(maxScroll(),targetX+delta*1.35));
- current=Math.min(total-1,Math.max(0,Math.round(targetX/window.innerWidth)));
- updateUI();
-},{passive:false});
-
-track.addEventListener("pointerdown",e=>{
- if(e.target.closest(".event-card"))return;
- isDragging=true;dragStart=e.clientX;dragOrigin=targetX;
- track.setPointerCapture(e.pointerId);
-});
-track.addEventListener("pointermove",e=>{
- if(!isDragging)return;
- targetX=Math.max(0,Math.min(maxScroll(),dragOrigin-(e.clientX-dragStart)));
- current=Math.min(total-1,Math.round(targetX/window.innerWidth));
- updateUI();
-});
-track.addEventListener("pointerup",()=>{
- if(!isDragging)return;
- isDragging=false;goTo(Math.round(targetX/window.innerWidth));
-});
-track.addEventListener("pointercancel",()=>{isDragging=false});
+document.getElementById("next").addEventListener("click",()=>goTo(activeYear+1));
+document.getElementById("previous").addEventListener("click",()=>goTo(activeYear-1));
 
 window.addEventListener("keydown",e=>{
- if(document.getElementById("detailOverlay").classList.contains("open")){
+ if(overlay.classList.contains("open")){
   if(e.key==="Escape")closeDetail();
   return;
  }
- if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();goTo(current+1)}
- if(e.key==="ArrowLeft"){e.preventDefault();goTo(current-1)}
- if(e.key==="Escape"){hero.classList.remove("hidden");archive.classList.remove("active")}
-});
-window.addEventListener("resize",()=>{
- targetX=Math.min(maxScroll(),current*window.innerWidth);
- currentX=targetX;updateUI();
+ if(e.key==="ArrowRight"||e.key===" "){
+  e.preventDefault();
+  if(archive.classList.contains("active"))goTo(activeYear+1);
+ }
+ if(e.key==="ArrowLeft"){
+  if(archive.classList.contains("active"))goTo(activeYear-1);
+ }
+ if(e.key==="Escape"){
+  hero.classList.remove("out");
+  archive.classList.remove("active");
+ }
 });
 
-const overlay=document.getElementById("detailOverlay");
-function openDetail(chapterIndex,eventIndex){
- const chapter=chapters[chapterIndex],event=chapter.events[eventIndex];
- document.getElementById("detailYear").textContent=`${chapter.year} / ${event.type}`;
- document.getElementById("detailTitle").textContent=event.name;
- document.getElementById("detailText").textContent=event.text;
- document.getElementById("detailMeta").innerHTML=event.meta.map(m=>`<span>${m}</span>`).join("");
+/* Wheel and trackpad */
+window.addEventListener("wheel",e=>{
+ if(!archive.classList.contains("active"))return;
+ if(overlay.classList.contains("open"))return;
+ e.preventDefault();
+ let amount=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
+ targetProgress=Math.max(0,Math.min(archiveData.length,targetProgress+amount*.0017));
+ activeYear=Math.max(0,Math.min(archiveData.length,Math.round(targetProgress)));
+ updateInterface();
+},{passive:false});
+
+/* Touch swipe */
+window.addEventListener("touchstart",e=>{
+ lastTouchX=e.touches[0].clientX;
+},{passive:true});
+window.addEventListener("touchend",e=>{
+ if(!archive.classList.contains("active"))return;
+ if(overlay.classList.contains("open"))return;
+ const delta=lastTouchX-e.changedTouches[0].clientX;
+ if(Math.abs(delta)>45)goTo(activeYear+(delta>0?1:-1));
+},{passive:true});
+
+/* Smooth animation loop */
+function animationLoop(){
+ cameraProgress+=(targetProgress-cameraProgress)*.075;
+ if(Math.abs(targetProgress-cameraProgress)<.0005)cameraProgress=targetProgress;
+ requestAnimationFrame(animationLoop);
+ update3DCamera();
+ updatePinPositions();
+}
+requestAnimationFrame(animationLoop);
+
+/* ---------------------------------------------------------
+   DETAIL MODAL
+   --------------------------------------------------------- */
+
+function openDetail(yearIndex,eventIndex){
+ const year=archiveData[yearIndex];
+ const event=year.events[eventIndex];
+ detailYear.textContent=`${year.year} / ${event.type}`;
+ detailTitle.textContent=event.title;
+ detailDescription.textContent=event.description;
+ detailTags.innerHTML=event.tags.map(tag=>`<span class="detail-tag">${tag}</span>`).join("");
+ detailActions.innerHTML="";
+ if(event.link){
+  const a=document.createElement("a");
+  a.className="detail-action";
+  a.href=event.link;
+  a.target="_blank";
+  a.rel="noopener noreferrer";
+  a.textContent=event.linkLabel||"Explore ↗";
+  detailActions.appendChild(a);
+ }
+ if(event.video){
+  const a=document.createElement("a");
+  a.className="detail-action";
+  a.href="https://www.youtube.com/watch?v="+event.video;
+  a.target="_blank";
+  a.rel="noopener noreferrer";
+  a.textContent="Watch video ↗";
+  detailActions.appendChild(a);
+ }
+ detailCover.innerHTML=`<span>${event.cover||"PTK"}</span>`;
+ detailNote.textContent=event.note||"Archivní záznam. Přesná data a původní materiály se mohou lišit podle dostupných zdrojů.";
  overlay.classList.add("open");
 }
 function closeDetail(){overlay.classList.remove("open")}
-track.addEventListener("click",e=>{
- const card=e.target.closest(".event-card");
- if(card)openDetail(Number(card.dataset.chapter),Number(card.dataset.event));
-});
 document.getElementById("detailClose").addEventListener("click",closeDetail);
 overlay.addEventListener("click",e=>{if(e.target===overlay)closeDetail()});
 
-/* Three.js — a floating chrome chain */
-(function initChain(){
- const canvas=document.getElementById("webgl");
+/* ---------------------------------------------------------
+   THREE.JS — REAL 3D CHAIN
+   --------------------------------------------------------- */
+
+let scene,camera,renderer,chainGroup,chainLinks,yearMarkers;
+let chainLength=archiveData.length*9.5;
+let pinObjects=[];
+let mouseX=0,mouseY=0;
+let clockStart=performance.now();
+
+function makeEnvironment(){
+ const canvas=document.createElement("canvas");
+ canvas.width=1024;canvas.height=512;
+ const ctx=canvas.getContext("2d");
+ const gradient=ctx.createLinearGradient(0,0,0,512);
+ gradient.addColorStop(0,"#b8c2d1");
+ gradient.addColorStop(.25,"#30343c");
+ gradient.addColorStop(.5,"#111318");
+ gradient.addColorStop(.75,"#555b65");
+ gradient.addColorStop(1,"#a9afb9");
+ ctx.fillStyle=gradient;ctx.fillRect(0,0,1024,512);
+ for(let i=0;i<14;i++){
+  const x=i*78;
+  const g=ctx.createLinearGradient(x,0,x+30,0);
+  g.addColorStop(0,"rgba(255,255,255,0)");
+  g.addColorStop(.5,"rgba(255,255,255,.9)");
+  g.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=g;ctx.fillRect(x,0,35,512);
+ }
+ const texture=new THREE.CanvasTexture(canvas);
+ texture.mapping=THREE.EquirectangularReflectionMapping;
+ texture.colorSpace=THREE.SRGBColorSpace;
+ return texture;
+}
+
+function init3D(){
+ const canvas=document.getElementById("scene");
  if(!window.THREE)return;
- const scene=new THREE.Scene();
- const camera=new THREE.PerspectiveCamera(38,window.innerWidth/window.innerHeight,.1,100);
- camera.position.set(0,0,12);
- const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+ scene=new THREE.Scene();
+ camera=new THREE.PerspectiveCamera(38,window.innerWidth/window.innerHeight,.1,500);
+ camera.position.set(0,0,17);
+ renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:"high-performance"});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
  renderer.setSize(window.innerWidth,window.innerHeight);
  renderer.outputColorSpace=THREE.SRGBColorSpace;
  renderer.toneMapping=THREE.ACESFilmicToneMapping;
- renderer.toneMappingExposure=1.25;
+ renderer.toneMappingExposure=1.35;
 
- scene.add(new THREE.AmbientLight(0xffffff,.7));
- const key=new THREE.DirectionalLight(0xffffff,3.5);key.position.set(3,5,7);scene.add(key);
- const rim=new THREE.PointLight(0x9bbcff,35,30);rim.position.set(-5,2,4);scene.add(rim);
- const warm=new THREE.PointLight(0xffffff,25,30);warm.position.set(5,-3,3);scene.add(warm);
+ const env=makeEnvironment();
+ scene.environment=env;
 
- const chain=new THREE.Group();scene.add(chain);
- const metal=new THREE.MeshStandardMaterial({
-  color:0xc8ccd2,metalness:1,roughness:.19
+ scene.add(new THREE.AmbientLight(0xffffff,.75));
+ const key=new THREE.DirectionalLight(0xffffff,4.5);
+ key.position.set(-4,8,10);scene.add(key);
+ const rim=new THREE.DirectionalLight(0xa8c7ff,3.2);
+ rim.position.set(5,-4,7);scene.add(rim);
+ const strip=new THREE.PointLight(0xffffff,45,100);
+ strip.position.set(0,7,8);scene.add(strip);
+ const lower=new THREE.PointLight(0x9cb9df,25,80);
+ lower.position.set(0,-7,4);scene.add(lower);
+
+ chainGroup=new THREE.Group();
+ scene.add(chainGroup);
+
+ const silver=new THREE.MeshPhysicalMaterial({
+  color:0xe2e5ea,
+  metalness:1,
+  roughness:.14,
+  clearcoat:1,
+  clearcoatRoughness:.08,
+  envMapIntensity:1.7
  });
- const darkMetal=new THREE.MeshStandardMaterial({
-  color:0x777e89,metalness:1,roughness:.24
+ const darkSilver=new THREE.MeshPhysicalMaterial({
+  color:0x8e969f,
+  metalness:1,
+  roughness:.19,
+  clearcoat:1,
+  clearcoatRoughness:.1,
+  envMapIntensity:1.5
  });
- const linkGeo=new THREE.TorusGeometry(.37,.105,16,48);
- const links=[];
- for(let i=0;i<19;i++){
-  const link=new THREE.Mesh(linkGeo,i%2?metal:darkMetal);
-  link.position.set((i-9)*.57,Math.sin(i*.58)*.17,Math.cos(i*.6)*.12);
-  link.rotation.set(.35,i%2?Math.PI/2:0,(i%2)*.3);
-  chain.add(link);links.push(link);
+ const brightSilver=new THREE.MeshPhysicalMaterial({
+  color:0xffffff,
+  metalness:1,
+  roughness:.09,
+  clearcoat:1,
+  clearcoatRoughness:.04,
+  envMapIntensity:2
+ });
+
+ const linkGeometry=new THREE.TorusGeometry(.39,.125,24,64);
+ const linkInner=new THREE.TorusGeometry(.39,.075,20,64);
+ chainLinks=[];
+ const spacing=.61;
+ const linkCount=Math.ceil(chainLength/spacing)+12;
+
+ for(let i=0;i<linkCount;i++){
+  const holder=new THREE.Group();
+  const mesh=new THREE.Mesh(linkGeometry,i%3===0?brightSilver:(i%2?silver:darkSilver));
+  const inner=new THREE.Mesh(linkInner,i%2?darkSilver:silver);
+  holder.add(mesh);
+  holder.position.x=i*spacing-chainLength/2;
+  holder.rotation.y=i%2===0?Math.PI/2:0;
+  holder.rotation.x=i%2===0?.12:-.12;
+  chainGroup.add(holder);
+  chainLinks.push(holder);
  }
- chain.position.set(0,-2.7,-1.5);
- chain.rotation.z=-.13;
- const stars=new THREE.Group();scene.add(stars);
- for(let i=0;i<100;i++){
-  const dot=new THREE.Mesh(new THREE.SphereGeometry(.012,6,6),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:Math.random()*.45}));
-  dot.position.set((Math.random()-.5)*20,(Math.random()-.5)*12,-3-Math.random()*5);
-  stars.add(dot);
+ chainGroup.position.y=-.1;
+
+ /* Diamond-like anchor stones */
+ yearMarkers=[];
+ archiveData.forEach((year,i)=>{
+  const group=new THREE.Group();
+  const ring=new THREE.Mesh(
+   new THREE.TorusGeometry(.72,.12,20,64),
+   brightSilver
+  );
+  ring.rotation.y=Math.PI/2;
+  group.add(ring);
+
+  const stoneGeo=new THREE.OctahedronGeometry(.3,1);
+  const stoneMat=new THREE.MeshPhysicalMaterial({
+   color:0xffffff,metalness:.3,roughness:.05,
+   transmission:.15,thickness:.6,clearcoat:1,
+   emissive:0x303744,emissiveIntensity:.25
+  });
+  const stone=new THREE.Mesh(stoneGeo,stoneMat);
+  stone.position.z=.48;
+  group.add(stone);
+
+  const x=(i*9.5)-chainLength/2+4.75;
+  group.position.set(x,0,0);
+  scene.add(group);
+  yearMarkers.push(group);
+ });
+
+ /* Individual event nodes are placed along the physical chain. */
+ pinObjects=[];
+ archiveData.forEach((year,yearIndex)=>{
+  year.events.forEach((event,eventIndex)=>{
+   const count=year.events.length;
+   const local=(eventIndex+1)/(count+1);
+   const x=(yearIndex*9.5)-chainLength/2+local*9.5;
+   const y=eventIndex%2===0?.0:.0;
+   const z=eventIndex%2===0?.12:-.12;
+   const gem=new THREE.Mesh(
+    new THREE.OctahedronGeometry(.12,1),
+    new THREE.MeshPhysicalMaterial({
+     color:0xffffff,metalness:.35,roughness:.06,
+     clearcoat:1,emissive:0x64758c,emissiveIntensity:.3
+    })
+   );
+   gem.position.set(x,y,z);
+   scene.add(gem);
+   pinObjects.push({mesh:gem,yearIndex,eventIndex});
+  });
+ });
+
+ /* Subtle floating dust */
+ const dustGeo=new THREE.BufferGeometry();
+ const dustCount=500;
+ const dustPositions=new Float32Array(dustCount*3);
+ for(let i=0;i<dustCount;i++){
+  dustPositions[i*3]=(Math.random()-.5)*chainLength;
+  dustPositions[i*3+1]=(Math.random()-.5)*14;
+  dustPositions[i*3+2]=-4-Math.random()*12;
  }
- let mouseX=0,mouseY=0;
+ dustGeo.setAttribute("position",new THREE.BufferAttribute(dustPositions,3));
+ const dust=new THREE.Points(
+  dustGeo,
+  new THREE.PointsMaterial({color:0xffffff,size:.025,transparent:true,opacity:.45})
+ );
+ scene.add(dust);
+
  window.addEventListener("mousemove",e=>{
   mouseX=(e.clientX/window.innerWidth-.5)*2;
   mouseY=(e.clientY/window.innerHeight-.5)*2;
  });
- function render(){
-  requestAnimationFrame(render);
-  const t=performance.now()*.00035;
-  chain.rotation.y=Math.sin(t)*.22+mouseX*.08;
-  chain.rotation.x=Math.cos(t*.7)*.1+mouseY*.04;
-  chain.position.y=-2.6+Math.sin(t*1.5)*.25;
-  chain.position.x=mouseX*.35;
-  links.forEach((link,i)=>{link.rotation.y=Math.sin(t*2+i*.35)*.08});
-  stars.rotation.y=mouseX*.018;
-  renderer.render(scene,camera);
+ window.addEventListener("resize",resize3D);
+ render3D();
+}
+
+function resize3D(){
+ if(!camera||!renderer)return;
+ camera.aspect=window.innerWidth/window.innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(window.innerWidth,window.innerHeight);
+}
+
+function update3DCamera(){
+ if(!camera)return;
+ const index=Math.min(cameraProgress,archiveData.length-1);
+ const x=(index*9.5)-chainLength/2+4.75;
+ camera.position.x=x+mouseX*.45;
+ camera.position.y=mouseY*.22;
+ camera.position.z=17;
+ camera.lookAt(x,0,0);
+}
+
+function render3D(){
+ requestAnimationFrame(render3D);
+ if(!renderer)return;
+ const t=(performance.now()-clockStart)*.001;
+ if(chainGroup){
+  chainGroup.rotation.y=Math.sin(t*.25)*.035;
+  chainLinks.forEach((link,i)=>{
+   link.rotation.z=Math.sin(t*.6+i*.08)*.025;
+  });
  }
- render();
- window.addEventListener("resize",()=>{
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
+ yearMarkers.forEach((marker,i)=>{
+  marker.rotation.y=Math.PI/2+Math.sin(t*.5+i*.3)*.12;
+  marker.rotation.x=Math.sin(t*.7+i*.5)*.08;
+  marker.position.y=Math.sin(t*.8+i*.6)*.12;
  });
-})();
+ pinObjects.forEach((p,i)=>{
+  const scale=1+Math.sin(t*2+i*.7)*.12;
+  p.mesh.scale.setScalar(scale);
+  p.mesh.rotation.y=t*.35+i;
+ });
+ renderer.render(scene,camera);
+}
 
-/* Optional ambience control — intentionally silent by default */
-document.getElementById("soundBtn").addEventListener("click",()=>{
- soundOn=!soundOn;
- document.getElementById("soundBtn").style.opacity=soundOn?"1":".65";
- document.getElementById("soundBtn").title=soundOn?"Ambient sound is not configured":"Sound off";
-});
+/* ---------------------------------------------------------
+   PROJECT 3D EVENT POSITIONS INTO THE SCREEN
+   --------------------------------------------------------- */
 
-/* Start with the hero screen. */
-updateUI();
+const vector=new THREE.Vector3();
+function updatePinPositions(){
+ if(!camera)return;
+ const width=window.innerWidth,height=window.innerHeight;
+ chainPins.forEach(pin=>{
+  const year=archiveData[pin.yearIndex];
+  const eventIndex=pin.eventIndex;
+  const local=(eventIndex+1)/(year.events.length+1);
+  const worldX=(pin.yearIndex*9.5)-chainLength/2+local*9.5;
+  const worldY=eventIndex%2===0?.95:-.95;
+  vector.set(worldX,worldY,.1);
+  vector.project(camera);
+  const x=(vector.x*.5+.5)*width;
+  const y=(-vector.y*.5+.5)*height;
+  const visible=vector.z<1 && x>-100 && x<width+100;
+  pin.element.style.transform=`translate(${x}px,${y}px)`;
+  pin.element.style.opacity=visible?"1":"0";
+  pin.element.style.pointerEvents=visible?"auto":"none";
+ });
+}
+
+/* ---------------------------------------------------------
+   INIT
+   --------------------------------------------------------- */
+
+init3D();
+updateInterface();
+
+/* Make the first screen the only visible thing before entry. */
+document.body.classList.remove("light");
 </script>
 </body>
 </html>
